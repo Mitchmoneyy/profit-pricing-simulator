@@ -11,7 +11,16 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Profit & Pricing Simulator">
 <meta property="og:description" content="Know your margin before you scale. Profit per sale, LTV:CAC, break-evens, price sensitivity and runway for e-commerce, SaaS, courses, agencies and creators.">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Profit & Pricing Simulator: know your margin before you scale. Example store with $23.77 profit per sale and LTV:CAC of 4.5x.">
+<meta name="twitter:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="twitter:title" content="Profit & Pricing Simulator">
 <meta name="twitter:description" content="Free unit-economics calculator: profit per sale, LTV:CAC, break-evens and runway, live in your browser.">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Profit & Pricing Simulator","applicationCategory":"BusinessApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free unit-economics calculator for online businesses: profit per sale, CAC, LTV:CAC, break-even price, price sensitivity, cohort LTV and cash runway.","featureList":["Dashboard screenshot import with in-browser OCR","CSV, TSV and JSON import","Break-even price, sales, conversion and CAC","Price sensitivity chart and target-profit price solver","Benchmarks for e-commerce, SaaS, course, agency and creator businesses","Snapshot history with margin and CAC alerts","Cash runway projection"]}</script>
@@ -334,6 +343,7 @@ tr.top1 .rank{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 @media (max-width:640px){.steps,.pgrid,.fgrid{grid-template-columns:minmax(0,1fr)}.lb-goal{display:none}.band{padding:44px 0}}
 @media (max-width:420px){.brand{font-size:18px;gap:8px}.brand-mark{width:22px;height:22px;font-size:11px}.top .wrap{gap:8px}}
 @media (max-width:360px){.hdr-cta{display:none}}
+@media (max-width:520px){#installBtn{display:none!important}}
 
 /* Summary */
 pre.summary{font-family:var(--mono);font-size:12px;background:var(--soft);border-radius:10px;padding:14px;max-height:340px;overflow:auto;white-space:pre-wrap;word-break:break-word;margin:12px 0 0}
@@ -394,6 +404,7 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:13px}
       <a href="#presets">Presets</a><a href="#import">Import</a><a href="#overview">Results</a><a href="#lab">What-if</a><a href="#pricing">Pricing</a><a href="#bench">Benchmarks</a><a href="#cohort">Cohorts</a><a href="#cash">Cash</a><a href="#history">History</a><a href="#share">Share</a>
     </nav>
     <div class="row" style="flex:none;flex-wrap:nowrap">
+      <button class="btn ghost sm" id="installBtn" hidden>Install app</button>
       <a class="btn sm hdr-cta" href="#app">Open simulator</a>
       <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -2076,6 +2087,14 @@ function init(){
   showView(fromHash || h === '#app' || (h !== '#home' && usedApp) ? 'app' : 'landing', true);
   syncInputs(); render(); renderLanding();
 }
+// Offline support and install prompt (hosted site only; not inside an embedded viewer)
+if ('serviceWorker' in navigator && !IN_FRAME && (location.protocol === 'https:' || location.hostname === 'localhost')){
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('#installBtn').hidden = false; });
+window.addEventListener('appinstalled', () => { installEvt = null; $('#installBtn').hidden = true; toast('Installed. Open it from your home screen or dock.'); });
+$('#installBtn').addEventListener('click', async () => { if (!installEvt) return; installEvt.prompt(); try { await installEvt.userChoice; } catch(e){} installEvt = null; $('#installBtn').hidden = true; });
 // expose for debugging/tests
 window.__pps = {compute, extract: t => normalizeFound(extractRaw(t)), rowsToText, splitDelimited, jsonToText, encodeState, decodeState, getState: () => state};
 init();
