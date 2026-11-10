@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LTV:CAC Calculator – Customer Lifetime Value vs Acquisition Cost | Free</title>
+<meta name="description" content="Calculate customer lifetime value, customer acquisition cost and the LTV:CAC ratio for one-time purchase or subscription businesses, with payback time.">
+<link rel="canonical" href="https://mitchmoneyy.github.io/profit-pricing-simulator/ltv-cac-calculator/">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:type" content="website"><meta property="og:url" content="https://mitchmoneyy.github.io/profit-pricing-simulator/ltv-cac-calculator/">
+<meta property="og:title" content="LTV:CAC Calculator – Customer Lifetime Value vs Acquisition Cost"><meta property="og:description" content="Calculate customer lifetime value, customer acquisition cost and the LTV:CAC ratio for one-time purchase or subscription businesses, with payback time.">
+<meta property="og:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png">
+<link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/pages.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "LTV:CAC ratio calculator", "url": "https://mitchmoneyy.github.io/profit-pricing-simulator/ltv-cac-calculator/", "applicationCategory": "BusinessApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Should LTV use revenue or profit?", "acceptedAnswer": {"@type": "Answer", "text": "Profit, specifically contribution after refunds, delivery and fees. Using revenue overstates lifetime value, sometimes by several times for physical products."}}, {"@type": "Question", "name": "Why cap subscription lifetime at 60 months?", "acceptedAnswer": {"@type": "Answer", "text": "Very low churn gives unrealistic lifetimes (0.5% churn implies 16 years). Capping at five years keeps the estimate conservative."}}, {"@type": "Question", "name": "What is payback period?", "acceptedAnswer": {"@type": "Answer", "text": "How many orders or months of contribution it takes to earn back what you spent to acquire the customer. Shorter payback means growth needs less cash."}}, {"@type": "Question", "name": "How do I improve LTV:CAC?", "acceptedAnswer": {"@type": "Answer", "text": "Raise contribution per sale (price, delivery cost, refunds), increase repeat orders or reduce churn, or lower CAC by improving conversion on the traffic you already pay for."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Profit & Pricing Simulator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/"}, {"@type": "ListItem", "position": 2, "name": "LTV:CAC calculator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/ltv-cac-calculator/"}]}</script>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="../"><span class="mark">%</span>Profit &amp; Pricing</a><a class="btn" href="../#app">Full simulator</a></div></header>
+<main class="wrap">
+<div class="crumb"><a href="../">Profit &amp; Pricing Simulator</a> / LTV:CAC calculator</div>
+<h1>LTV:CAC ratio calculator</h1>
+<p class="lead">Is each customer worth more than it costs to win them? Enter your numbers to get lifetime value, acquisition cost, the ratio between them and how long payback takes.</p>
+<section class="calc" aria-label="Calculator">
+<div class="fields"><label class="f"><span>Revenue model</span><span class="in"><select data-k="model" id="k-model"><option value="onetime">One-time</option><option value="subscription">Subscription</option></select></span></label><label class="f"><span>Price per sale or month</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="price" id="k-price" value="68" step="any" min="0"></span></label><label class="f"><span>Delivery cost per sale</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="delivery" id="k-delivery" value="22" step="any" min="0"></span></label><label class="f"><span>Payment fee</span><span class="in"><input type="number" inputmode="decimal" data-k="feePct" id="k-feePct" value="2.9" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Refund rate</span><span class="in"><input type="number" inputmode="decimal" data-k="refund" id="k-refund" value="6" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Orders per customer</span><span class="in"><input type="number" inputmode="decimal" data-k="orders" id="k-orders" value="1.8" step="any" min="0"><span class=u>×</span></span></label><label class="f"><span>Monthly churn</span><span class="in"><input type="number" inputmode="decimal" data-k="churn" id="k-churn" value="5" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Monthly ad spend</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="ad" id="k-ad" value="14000" step="any" min="0"></span></label><label class="f"><span>New customers per month</span><span class="in"><input type="number" inputmode="decimal" data-k="cust" id="k-cust" value="882" step="1" min="0"></span></label></div>
+<div class="out" aria-live="polite"><div class="o main"><div class="l">LTV:CAC</div><div class="v" id="oRatio">—</div></div><div class="o"><div class="l">Lifetime value (LTV)</div><div class="v" id="oLtv">—</div></div><div class="o"><div class="l">Acquisition cost (CAC)</div><div class="v" id="oCac">—</div></div><div class="o"><div class="l">Payback</div><div class="v" id="oPay">—</div></div><div class="o"><div class="l">Verdict</div><div class="v" id="oVerdict">—</div></div><a class="btn" id="openFull" href="../#app">Open in the full simulator</a><p class="note">Free, no sign-up. Results stay in your browser.</p></div>
+</section>
+<h2>How LTV and CAC are calculated</h2>
+<div class="formula">Contribution per sale = price × (1 − refund rate) − delivery cost − (price × fee% + $0.30)<br>LTV (one-time) = contribution × orders per customer<br>LTV (subscription) = contribution × 1 ÷ monthly churn, capped at 60 months<br>CAC = monthly ad spend ÷ new customers per month<br>LTV:CAC = LTV ÷ CAC</div>
+<p>LTV here is based on contribution, not revenue. Revenue-based LTV flatters the ratio because it ignores what each sale costs you to deliver.</p>
+<h2>What is a good LTV:CAC ratio?</h2>
+<div class="tw"><table><tr><th>Ratio</th><th>What it means</th></tr>
+<tr><td class="n">Below 1×</td><td>Each customer loses money over their lifetime. Growth makes it worse.</td></tr>
+<tr><td class="n">1–3×</td><td>Profitable on paper, with little room for rising ad costs or refunds.</td></tr>
+<tr><td class="n">3–5×</td><td>The usual target. Acquisition pays for itself with margin to spare.</td></tr>
+<tr><td class="n">Above 5×</td><td>Often a sign you could spend more to grow faster.</td></tr></table></div>
+<h2>Worked example</h2>
+<p>A subscription at $79 a month with $9 of delivery cost, 2.9% + $0.30 fees and 2% refunds contributes about $66 a month. At 4% monthly churn, customers stay 25 months on average, so LTV is about $1,646. If $16,000 of ads wins 540 customers, CAC is $29.63 and LTV:CAC is about 56×, a strong signal to spend more on acquisition.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>Should LTV use revenue or profit?</summary><p>Profit, specifically contribution after refunds, delivery and fees. Using revenue overstates lifetime value, sometimes by several times for physical products.</p></details><details><summary>Why cap subscription lifetime at 60 months?</summary><p>Very low churn gives unrealistic lifetimes (0.5% churn implies 16 years). Capping at five years keeps the estimate conservative.</p></details><details><summary>What is payback period?</summary><p>How many orders or months of contribution it takes to earn back what you spent to acquire the customer. Shorter payback means growth needs less cash.</p></details><details><summary>How do I improve LTV:CAC?</summary><p>Raise contribution per sale (price, delivery cost, refunds), increase repeat orders or reduce churn, or lower CAC by improving conversion on the traffic you already pay for.</p></details>
+<section class="cta"><h2>See the whole picture</h2><p>The full simulator adds a health score, five ranked levers, benchmarks, cohort LTV, cash runway and monthly history. Import a dashboard screenshot to fill it in.</p><a class="btn" href="../#app">Open the simulator</a></section>
+<h2>More calculators</h2>
+<div class="related"><a href="../break-even-calculator/">Break-even calculator</a><a href="../profit-margin-calculator/">Profit margin calculator</a><a href="../pricing-calculator/">Pricing calculator</a><a href="../saas-churn-ltv-calculator/">SaaS churn & LTV calculator</a></div>
+</main>
+<footer><div class="wrap">Profit &amp; Pricing Simulator · Fee per sale = price × fee% + $0.30 · All calculations run in your browser.</div></footer>
+<script src="../assets/pages.js"></script>
+<script>Calc.start(s => { const sub = s.model === 'subscription';
+  document.getElementById('k-orders').closest('.f').style.opacity = sub ? .4 : 1; document.getElementById('k-churn').closest('.f').style.opacity = sub ? 1 : .4;
+  s.cacDirect = s.cust > 0 ? s.ad / s.cust : Infinity; const m = Calc.compute(s);
+  oRatio.textContent = Calc.x(m.ratio); oLtv.textContent = Calc.money(m.ltv); oCac.textContent = Calc.money(m.cac);
+  const pay = m.contribution > 0 ? m.cac / m.contribution : Infinity;
+  oPay.textContent = isFinite(pay) ? (pay <= 1 ? 'First ' + (sub ? 'month' : 'order') : Calc.num(pay, 1) + (sub ? ' months' : ' orders')) : 'Never';
+  oVerdict.textContent = m.ratio < 1 ? 'Losing money per customer' : m.ratio < 3 ? 'Below the 3× rule of thumb' : m.ratio <= 6 ? 'Healthy' : 'Room to spend more on growth';
+  return {state: {visitors: 42000, conv: s.cust / 420}}; });</script>
+</body>
+</html>

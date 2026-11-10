@@ -334,6 +334,10 @@ tr.top1 .rank{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .privacy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px;align-items:start}
 .pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .pgrid p{font-size:14px;margin-top:4px}
+.calc-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.calc-links a{border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-decoration:none;display:flex;flex-direction:column;gap:4px}
+.calc-links a:hover{border-color:var(--fg)}
+.calc-links span{font-size:13.5px;color:var(--muted)}
 .band{background:var(--fg);color:var(--bg);padding:64px 0;text-align:left}
 .band h2{font-size:clamp(30px,4.4vw,48px);max-width:720px}
 .band p{opacity:.75;margin:10px 0 22px}
@@ -398,7 +402,7 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:13px}
   <div class="wrap">
     <a class="brand" href="#home"><span class="brand-mark">%</span>Profit &amp; Pricing</a>
     <nav class="nav nav-landing" aria-label="Page">
-      <a href="#questions">What it answers</a><a href="#features">Features</a><a href="#models">Business models</a><a href="#faq">FAQ</a>
+      <a href="#questions">What it answers</a><a href="#calculators">Calculators</a><a href="#features">Features</a><a href="#models">Business models</a><a href="#faq">FAQ</a>
     </nav>
     <nav class="nav nav-app" aria-label="Sections">
       <a href="#presets">Presets</a><a href="#import">Import</a><a href="#overview">Results</a><a href="#lab">What-if</a><a href="#pricing">Pricing</a><a href="#bench">Benchmarks</a><a href="#cohort">Cohorts</a><a href="#cash">Cash</a><a href="#history">History</a><a href="#share">Share</a>
@@ -469,6 +473,19 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:13px}
   <div class="wrap">
     <div class="sec-head"><div><h2>Built for your business model</h2><p>Pick the closest one. It loads typical numbers you can replace with yours.</p></div></div>
     <div class="presets" data-grid="landing"></div>
+  </div>
+</section>
+
+<section class="section" id="calculators">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Need one answer fast?</h2><p>Single-purpose calculators. Each one can hand its numbers to the full simulator.</p></div></div>
+    <div class="calc-links">
+      <a href="break-even-calculator/"><b>Break-even calculator</b><span>Sales, price and conversion you need each month</span></a>
+      <a href="profit-margin-calculator/"><b>Profit margin calculator</b><span>What you keep from each sale after every cost</span></a>
+      <a href="ltv-cac-calculator/"><b>LTV:CAC calculator</b><span>Whether customers are worth what they cost</span></a>
+      <a href="pricing-calculator/"><b>Pricing calculator</b><span>The price that maximises monthly profit</span></a>
+      <a href="saas-churn-ltv-calculator/"><b>SaaS churn &amp; LTV calculator</b><span>Lifetime, payback and 12-month retention</span></a>
+    </div>
   </div>
 </section>
 

@@ -1,0 +1,6 @@
+https://mitchmoneyy.github.io/profit-pricing-simulator/
+https://mitchmoneyy.github.io/profit-pricing-simulator/break-even-calculator/
+https://mitchmoneyy.github.io/profit-pricing-simulator/ltv-cac-calculator/
+https://mitchmoneyy.github.io/profit-pricing-simulator/profit-margin-calculator/
+https://mitchmoneyy.github.io/profit-pricing-simulator/pricing-calculator/
+https://mitchmoneyy.github.io/profit-pricing-simulator/saas-churn-ltv-calculator/

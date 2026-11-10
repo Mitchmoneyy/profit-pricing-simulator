@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Profit Per Sale &amp; Contribution Margin Calculator | Free</title>
+<meta name="description" content="See exactly how much you keep from each sale after refunds, delivery costs, payment fees and the cost to acquire the customer. Contribution margin and profit per sale.">
+<link rel="canonical" href="https://mitchmoneyy.github.io/profit-pricing-simulator/profit-margin-calculator/">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:type" content="website"><meta property="og:url" content="https://mitchmoneyy.github.io/profit-pricing-simulator/profit-margin-calculator/">
+<meta property="og:title" content="Profit Per Sale &amp; Contribution Margin Calculator"><meta property="og:description" content="See exactly how much you keep from each sale after refunds, delivery costs, payment fees and the cost to acquire the customer. Contribution margin and profit per sale.">
+<meta property="og:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png">
+<link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/pages.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Profit per sale and margin calculator", "url": "https://mitchmoneyy.github.io/profit-pricing-simulator/profit-margin-calculator/", "applicationCategory": "BusinessApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a good profit margin for an online store?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the category, but a contribution margin of 40\u201355% before ads gives most stores enough room to pay for acquisition and still profit on the first order."}}, {"@type": "Question", "name": "Do I include shipping in delivery cost?", "acceptedAnswer": {"@type": "Answer", "text": "Include whatever you pay to fulfil an order: product cost, packaging, shipping you pay for, and per-order platform or app fees."}}, {"@type": "Question", "name": "Is profit per sale negative a problem?", "acceptedAnswer": {"@type": "Answer", "text": "Not always. If customers buy again or subscribe, lifetime value can cover the loss on the first order. Use the LTV:CAC calculator to check."}}, {"@type": "Question", "name": "Where do I find my customer acquisition cost?", "acceptedAnswer": {"@type": "Answer", "text": "Divide last month's ad spend by the number of new customers it brought in. Many ad dashboards show this as cost per purchase or cost per acquisition."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Profit & Pricing Simulator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/"}, {"@type": "ListItem", "position": 2, "name": "Profit margin calculator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/profit-margin-calculator/"}]}</script>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="../"><span class="mark">%</span>Profit &amp; Pricing</a><a class="btn" href="../#app">Full simulator</a></div></header>
+<main class="wrap">
+<div class="crumb"><a href="../">Profit &amp; Pricing Simulator</a> / Profit margin calculator</div>
+<h1>Profit per sale and margin calculator</h1>
+<p class="lead">Gross margin hides the costs that eat online businesses: refunds, card fees and ads. Enter a sale to see what you actually keep.</p>
+<section class="calc" aria-label="Calculator">
+<div class="fields"><label class="f"><span>Price per sale</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="price" id="k-price" value="68" step="any" min="0"></span></label><label class="f"><span>Delivery cost (COGS, shipping)</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="delivery" id="k-delivery" value="22" step="any" min="0"></span></label><label class="f"><span>Payment fee</span><span class="in"><input type="number" inputmode="decimal" data-k="feePct" id="k-feePct" value="2.9" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Refund rate</span><span class="in"><input type="number" inputmode="decimal" data-k="refund" id="k-refund" value="6" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Cost to acquire a customer</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="cacDirect" id="k-cacDirect" value="15.87" step="any" min="0"></span></label></div>
+<div class="out" aria-live="polite"><div class="o main"><div class="l">Profit per sale</div><div class="v" id="oPps">—</div></div><div class="o"><div class="l">Contribution per sale</div><div class="v" id="oContrib">—</div></div><div class="o"><div class="l">Contribution margin</div><div class="v" id="oMargin">—</div></div><div class="o"><div class="l">Payment fee per sale</div><div class="v" id="oFee">—</div></div><div class="o"><div class="l">Refund cost per sale</div><div class="v" id="oRef">—</div></div><a class="btn" id="openFull" href="../#app">Open in the full simulator</a><p class="note">Free, no sign-up. Results stay in your browser.</p></div>
+</section>
+<h2>The formula</h2>
+<div class="formula">Fee per sale = price × fee% + $0.30<br>Refund cost = price × refund rate<br>Contribution = price − refund cost − delivery cost − fee<br>Contribution margin = contribution ÷ price<br>Profit per sale = contribution − customer acquisition cost</div>
+<h2>Gross margin vs contribution margin vs profit per sale</h2>
+<div class="tw"><table><tr><th>Measure</th><th>Subtracts</th><th>Example ($68 sale)</th></tr>
+<tr><td>Gross margin</td><td>Product and delivery cost</td><td class="n">$46.00 (68%)</td></tr>
+<tr><td>Contribution margin</td><td>+ refunds and payment fees</td><td class="n">$39.65 (58%)</td></tr>
+<tr><td>Profit per sale</td><td>+ cost to acquire the customer</td><td class="n">$23.78 (35%)</td></tr></table></div>
+<p>The gap between the first and last line is why stores with healthy-looking gross margins can still lose money: refunds, fees and ads are paid on every order.</p>
+<h2>Typical contribution margins by business model</h2>
+<p>Rough ranges for an average business: e-commerce around 35%, agencies around 35%, creators and memberships around 65%, SaaS around 70%, online courses around 75%. Top performers run 15–20 points higher.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>What is a good profit margin for an online store?</summary><p>It depends on the category, but a contribution margin of 40–55% before ads gives most stores enough room to pay for acquisition and still profit on the first order.</p></details><details><summary>Do I include shipping in delivery cost?</summary><p>Include whatever you pay to fulfil an order: product cost, packaging, shipping you pay for, and per-order platform or app fees.</p></details><details><summary>Is profit per sale negative a problem?</summary><p>Not always. If customers buy again or subscribe, lifetime value can cover the loss on the first order. Use the LTV:CAC calculator to check.</p></details><details><summary>Where do I find my customer acquisition cost?</summary><p>Divide last month&#x27;s ad spend by the number of new customers it brought in. Many ad dashboards show this as cost per purchase or cost per acquisition.</p></details>
+<section class="cta"><h2>See the whole picture</h2><p>The full simulator adds a health score, five ranked levers, benchmarks, cohort LTV, cash runway and monthly history. Import a dashboard screenshot to fill it in.</p><a class="btn" href="../#app">Open the simulator</a></section>
+<h2>More calculators</h2>
+<div class="related"><a href="../break-even-calculator/">Break-even calculator</a><a href="../ltv-cac-calculator/">LTV:CAC calculator</a><a href="../pricing-calculator/">Pricing calculator</a><a href="../saas-churn-ltv-calculator/">SaaS churn & LTV calculator</a></div>
+</main>
+<footer><div class="wrap">Profit &amp; Pricing Simulator · Fee per sale = price × fee% + $0.30 · All calculations run in your browser.</div></footer>
+<script src="../assets/pages.js"></script>
+<script>Calc.start(s => { s.model = 'onetime'; const m = Calc.compute(s);
+  oPps.textContent = Calc.money(m.pps); oContrib.textContent = Calc.money(m.contribution); oMargin.textContent = Calc.pct(m.margin);
+  oFee.textContent = Calc.money(m.fee); oRef.textContent = Calc.money(s.price * m.r);
+  return {state: {ad: s.cacDirect * 882, visitors: 42000, conv: 2.1}}; });</script>
+</body>
+</html>

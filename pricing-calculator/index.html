@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pricing Calculator – Find Your Profit-Maximising Price | Free</title>
+<meta name="description" content="Find the price that maximises monthly profit, accounting for the conversions you lose when you raise prices. Uses price elasticity, refunds, fees and ad spend.">
+<link rel="canonical" href="https://mitchmoneyy.github.io/profit-pricing-simulator/pricing-calculator/">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:type" content="website"><meta property="og:url" content="https://mitchmoneyy.github.io/profit-pricing-simulator/pricing-calculator/">
+<meta property="og:title" content="Pricing Calculator – Find Your Profit-Maximising Price"><meta property="og:description" content="Find the price that maximises monthly profit, accounting for the conversions you lose when you raise prices. Uses price elasticity, refunds, fees and ad spend.">
+<meta property="og:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png">
+<link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/pages.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Pricing calculator: find the price that maximises profit", "url": "https://mitchmoneyy.github.io/profit-pricing-simulator/pricing-calculator/", "applicationCategory": "BusinessApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the profit-maximising price the right price?", "acceptedAnswer": {"@type": "Answer", "text": "It is the price that maximises this month's profit under your elasticity estimate. You may choose a lower price to grow faster or win market share; the calculator shows what that choice costs."}}, {"@type": "Question", "name": "Does raising prices increase refunds?", "acceptedAnswer": {"@type": "Answer", "text": "It can. If you expect higher refunds at a higher price, raise the refund rate when testing that price."}}, {"@type": "Question", "name": "What if I sell a subscription?", "acceptedAnswer": {"@type": "Answer", "text": "The same logic applies to the monthly price. In the full simulator, switch to the subscription model to also see how churn changes lifetime value."}}, {"@type": "Question", "name": "How accurate is this?", "acceptedAnswer": {"@type": "Answer", "text": "As accurate as the elasticity estimate. Treat the result as a direction and a size of opportunity, then confirm it with a real price test."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Profit & Pricing Simulator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/"}, {"@type": "ListItem", "position": 2, "name": "Pricing calculator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/pricing-calculator/"}]}</script>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="../"><span class="mark">%</span>Profit &amp; Pricing</a><a class="btn" href="../#app">Full simulator</a></div></header>
+<main class="wrap">
+<div class="crumb"><a href="../">Profit &amp; Pricing Simulator</a> / Pricing calculator</div>
+<h1>Pricing calculator: find the price that maximises profit</h1>
+<p class="lead">Raising prices loses some buyers. Lowering them wins some back. This calculator finds the price where monthly profit peaks, using a price elasticity you can adjust.</p>
+<section class="calc" aria-label="Calculator">
+<div class="fields"><label class="f"><span>Current price</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="price" id="k-price" value="68" step="any" min="0"></span></label><label class="f"><span>Delivery cost per sale</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="delivery" id="k-delivery" value="22" step="any" min="0"></span></label><label class="f"><span>Payment fee</span><span class="in"><input type="number" inputmode="decimal" data-k="feePct" id="k-feePct" value="2.9" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Refund rate</span><span class="in"><input type="number" inputmode="decimal" data-k="refund" id="k-refund" value="6" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Monthly visitors</span><span class="in"><input type="number" inputmode="decimal" data-k="visitors" id="k-visitors" value="42000" step="1" min="0"></span></label><label class="f"><span>Conversion rate</span><span class="in"><input type="number" inputmode="decimal" data-k="conv" id="k-conv" value="2.1" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Monthly ad spend</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="ad" id="k-ad" value="14000" step="any" min="0"></span></label><label class="f"><span>Monthly fixed costs</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="fixed" id="k-fixed" value="9000" step="any" min="0"></span></label><label class="f"><span>Price elasticity</span><span class="in"><input type="number" inputmode="decimal" data-k="elast" id="k-elast" value="1.4" step="0.1" min="0"><span class=u>e</span></span></label></div>
+<div class="out" aria-live="polite"><div class="o main"><div class="l">Profit-maximising price</div><div class="v" id="oBest">—</div></div><div class="o"><div class="l">Monthly profit at that price</div><div class="v" id="oBestP">—</div></div><div class="o"><div class="l">Monthly profit today</div><div class="v" id="oNowP">—</div></div><div class="o"><div class="l">Conversion at best price</div><div class="v" id="oBestC">—</div></div><a class="btn" id="openFull" href="../#app">Open in the full simulator</a><p class="note">Free, no sign-up. Results stay in your browser.</p></div>
+</section>
+<h2>Your prices compared</h2>
+<div class="tw"><table><thead><tr><th>Price</th><th>Conversion</th><th>Sales / month</th><th>Monthly profit</th></tr></thead><tbody id="ptable"></tbody></table></div>
+<h2>What price elasticity means</h2>
+<p>Elasticity describes how strongly conversion reacts to price. At an elasticity of 1.0, a 10% price rise loses about 10% of conversions. Below 1, customers barely notice price changes, which is typical of niche tools, B2B software and trusted brands. Above 1.5, buyers compare prices closely, as with commodity products and impulse buys.</p>
+<div class="formula">Conversion at new price = current conversion × (new price ÷ current price) ^ −elasticity<br>Monthly profit = new customers × contribution − ad spend − fixed costs</div>
+<h2>How to estimate your elasticity</h2>
+<p>The best estimate comes from your own history: compare conversion before and after a past price change, holding traffic quality steady. Without data, start at 1.0 for most consumer products and 0.6–0.8 for B2B or specialist products, then test a price change on new visitors and update the number.</p>
+<h2>Why the best price is often higher than you think</h2>
+<p>Every sale carries fixed costs: delivery, the $0.30 fee and the ad spend that brought the buyer in. A higher price spreads those over fewer, more profitable sales. Unless your market is very price-sensitive, the profit-maximising price usually sits above where founders start.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>Is the profit-maximising price the right price?</summary><p>It is the price that maximises this month&#x27;s profit under your elasticity estimate. You may choose a lower price to grow faster or win market share; the calculator shows what that choice costs.</p></details><details><summary>Does raising prices increase refunds?</summary><p>It can. If you expect higher refunds at a higher price, raise the refund rate when testing that price.</p></details><details><summary>What if I sell a subscription?</summary><p>The same logic applies to the monthly price. In the full simulator, switch to the subscription model to also see how churn changes lifetime value.</p></details><details><summary>How accurate is this?</summary><p>As accurate as the elasticity estimate. Treat the result as a direction and a size of opportunity, then confirm it with a real price test.</p></details>
+<section class="cta"><h2>See the whole picture</h2><p>The full simulator adds a health score, five ranked levers, benchmarks, cohort LTV, cash runway and monthly history. Import a dashboard screenshot to fill it in.</p><a class="btn" href="../#app">Open the simulator</a></section>
+<h2>More calculators</h2>
+<div class="related"><a href="../break-even-calculator/">Break-even calculator</a><a href="../ltv-cac-calculator/">LTV:CAC calculator</a><a href="../profit-margin-calculator/">Profit margin calculator</a><a href="../saas-churn-ltv-calculator/">SaaS churn & LTV calculator</a></div>
+</main>
+<footer><div class="wrap">Profit &amp; Pricing Simulator · Fee per sale = price × fee% + $0.30 · All calculations run in your browser.</div></footer>
+<script src="../assets/pages.js"></script>
+<script>Calc.start(s => { s.model = 'onetime'; const p0 = s.price || 1; let best = null, rows = [];
+  for (let i = 0; i <= 360; i++){ const p = p0 * (0.4 + i * 0.005), cv = Math.min(100, s.conv * Math.pow(p / p0, -s.elast));
+    const m = Calc.compute(Object.assign({}, s, {price: p, conv: cv})); if (!best || m.monthly > best.y) best = {p, y: m.monthly, cv}; }
+  const now = Calc.compute(s);
+  oBest.textContent = Calc.money(best.p); oBestP.textContent = Calc.money(best.y, 0); oNowP.textContent = Calc.money(now.monthly, 0); oBestC.textContent = Calc.pct(best.cv, 2);
+  const tb = document.getElementById('ptable'); tb.innerHTML = [0.8, 0.9, 1, 1.1, 1.25, 1.5].map(k => { const p = p0 * k, cv = Math.min(100, s.conv * Math.pow(k, -s.elast)), m = Calc.compute(Object.assign({}, s, {price: p, conv: cv}));
+    return `<tr><td class="n">${Calc.money(p)}</td><td class="n">${Calc.pct(cv, 2)}</td><td class="n">${Calc.num(m.newCust)}</td><td class="n">${Calc.money(m.monthly, 0)}</td></tr>`; }).join(''); });</script>
+</body>
+</html>

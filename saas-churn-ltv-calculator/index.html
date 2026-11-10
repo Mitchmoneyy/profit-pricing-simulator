@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SaaS LTV &amp; Churn Calculator – Customer Lifetime and Payback | Free</title>
+<meta name="description" content="Calculate SaaS customer lifetime value from monthly churn, see average customer lifetime, CAC payback months and how many customers remain after 12 months.">
+<link rel="canonical" href="https://mitchmoneyy.github.io/profit-pricing-simulator/saas-churn-ltv-calculator/">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:type" content="website"><meta property="og:url" content="https://mitchmoneyy.github.io/profit-pricing-simulator/saas-churn-ltv-calculator/">
+<meta property="og:title" content="SaaS LTV &amp; Churn Calculator – Customer Lifetime and Payback"><meta property="og:description" content="Calculate SaaS customer lifetime value from monthly churn, see average customer lifetime, CAC payback months and how many customers remain after 12 months.">
+<meta property="og:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://mitchmoneyy.github.io/profit-pricing-simulator/og-image.png">
+<link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/pages.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "SaaS churn and LTV calculator", "url": "https://mitchmoneyy.github.io/profit-pricing-simulator/saas-churn-ltv-calculator/", "applicationCategory": "BusinessApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a good churn rate for SaaS?", "acceptedAnswer": {"@type": "Answer", "text": "For small-business SaaS, 3\u20135% monthly is common and under 2% is excellent. Enterprise products often see well under 1% monthly."}}, {"@type": "Question", "name": "Why does LTV use contribution instead of revenue?", "acceptedAnswer": {"@type": "Answer", "text": "Hosting, support and payment fees are paid every month the customer stays. Revenue-based LTV ignores them and overstates what a customer is worth."}}, {"@type": "Question", "name": "What is CAC payback?", "acceptedAnswer": {"@type": "Answer", "text": "The month in which a customer's cumulative contribution, after churn, first exceeds what you paid to acquire them. Under 12 months is a common target."}}, {"@type": "Question", "name": "Is monthly or annual churn better to track?", "acceptedAnswer": {"@type": "Answer", "text": "Track monthly for decisions, since it reacts faster. Annual retention equals (1 \u2212 monthly churn)^12."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Profit & Pricing Simulator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/"}, {"@type": "ListItem", "position": 2, "name": "SaaS churn & LTV calculator", "item": "https://mitchmoneyy.github.io/profit-pricing-simulator/saas-churn-ltv-calculator/"}]}</script>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="../"><span class="mark">%</span>Profit &amp; Pricing</a><a class="btn" href="../#app">Full simulator</a></div></header>
+<main class="wrap">
+<div class="crumb"><a href="../">Profit &amp; Pricing Simulator</a> / SaaS churn & LTV calculator</div>
+<h1>SaaS churn and LTV calculator</h1>
+<p class="lead">Monthly churn decides how long customers stay and what they are worth. Enter your plan price, costs and churn to see lifetime value, payback and retention.</p>
+<section class="calc" aria-label="Calculator">
+<div class="fields"><label class="f"><span>Monthly plan price</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="price" id="k-price" value="79" step="any" min="0"></span></label><label class="f"><span>Cost to serve per month</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="delivery" id="k-delivery" value="9" step="any" min="0"></span></label><label class="f"><span>Payment fee</span><span class="in"><input type="number" inputmode="decimal" data-k="feePct" id="k-feePct" value="2.9" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Refund rate</span><span class="in"><input type="number" inputmode="decimal" data-k="refund" id="k-refund" value="2" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Monthly churn</span><span class="in"><input type="number" inputmode="decimal" data-k="churn" id="k-churn" value="4" step="any" min="0"><span class=u>%</span></span></label><label class="f"><span>Customer acquisition cost</span><span class="in"><span class=u>$</span><input type="number" inputmode="decimal" data-k="cacDirect" id="k-cacDirect" value="29.63" step="any" min="0"></span></label></div>
+<div class="out" aria-live="polite"><div class="o main"><div class="l">Lifetime value (LTV)</div><div class="v" id="oLtv">—</div></div><div class="o"><div class="l">Average customer lifetime</div><div class="v" id="oLife">—</div></div><div class="o"><div class="l">LTV:CAC</div><div class="v" id="oRatio">—</div></div><div class="o"><div class="l">CAC payback</div><div class="v" id="oPay">—</div></div><div class="o"><div class="l">Still subscribed after 12 months</div><div class="v" id="oRet">—</div></div><a class="btn" id="openFull" href="../#app">Open in the full simulator</a><p class="note">Free, no sign-up. Results stay in your browser.</p></div>
+</section>
+<h2>The formulas</h2>
+<div class="formula">Contribution per month = price × (1 − refund rate) − cost to serve − (price × fee% + $0.30)<br>Average lifetime (months) = 1 ÷ monthly churn, capped at 60<br>LTV = contribution per month × average lifetime<br>Retention after n months = (1 − monthly churn) ^ n</div>
+<h2>How churn compounds</h2>
+<div class="tw"><table><tr><th>Monthly churn</th><th>Average lifetime</th><th>Left after 12 months</th></tr>
+<tr><td class="n">1.5%</td><td class="n">67 months (capped at 60)</td><td class="n">83%</td></tr>
+<tr><td class="n">3%</td><td class="n">33 months</td><td class="n">69%</td></tr>
+<tr><td class="n">5%</td><td class="n">20 months</td><td class="n">54%</td></tr>
+<tr><td class="n">8%</td><td class="n">12.5 months</td><td class="n">37%</td></tr></table></div>
+<p>Halving churn doubles lifetime value. For most subscription businesses that is worth more than any price change.</p>
+<h2>Typical monthly churn</h2>
+<p>Rough tiers for small and mid-sized SaaS: around 5% a month is average, 3% is top-quartile and 1.5% or less is top-10%. Memberships and creator subscriptions usually run higher, around 6–9%.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>What is a good churn rate for SaaS?</summary><p>For small-business SaaS, 3–5% monthly is common and under 2% is excellent. Enterprise products often see well under 1% monthly.</p></details><details><summary>Why does LTV use contribution instead of revenue?</summary><p>Hosting, support and payment fees are paid every month the customer stays. Revenue-based LTV ignores them and overstates what a customer is worth.</p></details><details><summary>What is CAC payback?</summary><p>The month in which a customer&#x27;s cumulative contribution, after churn, first exceeds what you paid to acquire them. Under 12 months is a common target.</p></details><details><summary>Is monthly or annual churn better to track?</summary><p>Track monthly for decisions, since it reacts faster. Annual retention equals (1 − monthly churn)^12.</p></details>
+<section class="cta"><h2>See the whole picture</h2><p>The full simulator adds a health score, five ranked levers, benchmarks, cohort LTV, cash runway and monthly history. Import a dashboard screenshot to fill it in.</p><a class="btn" href="../#app">Open the simulator</a></section>
+<h2>More calculators</h2>
+<div class="related"><a href="../break-even-calculator/">Break-even calculator</a><a href="../ltv-cac-calculator/">LTV:CAC calculator</a><a href="../profit-margin-calculator/">Profit margin calculator</a><a href="../pricing-calculator/">Pricing calculator</a></div>
+</main>
+<footer><div class="wrap">Profit &amp; Pricing Simulator · Fee per sale = price × fee% + $0.30 · All calculations run in your browser.</div></footer>
+<script src="../assets/pages.js"></script>
+<script>Calc.start(s => { s.model = 'subscription'; const m = Calc.compute(s), c = s.churn / 100;
+  oLtv.textContent = Calc.money(m.ltv); oLife.textContent = Calc.num(m.life, 1) + ' months'; oRatio.textContent = Calc.x(m.ratio);
+  let pay = null, tot = 0; for (let k = 0; k < 120; k++){ tot += m.contribution * Math.pow(1 - c, k); if (tot >= m.cac){ pay = k + 1; break; } }
+  oPay.textContent = pay ? 'Month ' + pay : 'More than 10 years'; oRet.textContent = Calc.pct(Math.pow(1 - c, 12) * 100, 0);
+  return {state: {ad: s.cacDirect * 540, visitors: 30000, conv: 1.8}}; }, 'saas');</script>
+</body>
+</html>

@@ -5,20 +5,22 @@ name: Notify search engines
 on:
   push:
     branches: [main]
-    paths: ['index.html', 'sitemap.xml']
+    paths: ['**/index.html', 'sitemap.xml']
   workflow_dispatch:
 
 jobs:
   indexnow:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Wait for GitHub Pages to publish the new version
         run: sleep 90
       - name: Submit the page to IndexNow
         run: |
+          python3 -c "import json; urls=[u.strip() for u in open('tools/urls.txt') if u.strip()]; print(json.dumps({'host':'mitchmoneyy.github.io','key':'f8bdc82f197f06dc855b2f529aa37987','keyLocation':'https://mitchmoneyy.github.io/profit-pricing-simulator/f8bdc82f197f06dc855b2f529aa37987.txt','urlList':urls}))" > body.json
+          cat body.json; echo
           code=$(curl -sS -o response.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow \
-            -H 'Content-Type: application/json; charset=utf-8' \
-            -d '{"host":"mitchmoneyy.github.io","key":"f8bdc82f197f06dc855b2f529aa37987","keyLocation":"https://mitchmoneyy.github.io/profit-pricing-simulator/f8bdc82f197f06dc855b2f529aa37987.txt","urlList":["https://mitchmoneyy.github.io/profit-pricing-simulator/"]}')
+            -H 'Content-Type: application/json; charset=utf-8' --data @body.json)
           cat response.txt; echo
           echo "IndexNow answered HTTP $code"
           case "$code" in 200|202) ;; *) echo "::error::IndexNow rejected the submission. Check that GitHub Pages is turned on."; exit 1;; esac
