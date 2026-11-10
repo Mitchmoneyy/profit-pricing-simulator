@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mitchmoneyy.github.io/profit-pricing-simulator/sitemap.xml

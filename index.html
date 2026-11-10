@@ -1,0 +1,2085 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profit & Pricing Simulator — Free Unit Economics Calculator</title>
+<meta name="description" content="Free profit calculator for online businesses. See profit per sale, CAC, LTV:CAC, break-even price and cash runway as you type. Import a dashboard screenshot or CSV. No sign-up; nothing leaves your browser.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://mitchmoneyy.github.io/profit-pricing-simulator/">
+<meta property="og:url" content="https://mitchmoneyy.github.io/profit-pricing-simulator/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Profit & Pricing Simulator">
+<meta property="og:description" content="Know your margin before you scale. Profit per sale, LTV:CAC, break-evens, price sensitivity and runway for e-commerce, SaaS, courses, agencies and creators.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Profit & Pricing Simulator">
+<meta name="twitter:description" content="Free unit-economics calculator: profit per sale, LTV:CAC, break-evens and runway, live in your browser.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Profit & Pricing Simulator","applicationCategory":"BusinessApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free unit-economics calculator for online businesses: profit per sale, CAC, LTV:CAC, break-even price, price sensitivity, cohort LTV and cash runway.","featureList":["Dashboard screenshot import with in-browser OCR","CSV, TSV and JSON import","Break-even price, sales, conversion and CAC","Price sensitivity chart and target-profit price solver","Benchmarks for e-commerce, SaaS, course, agency and creator businesses","Snapshot history with margin and CAC alerts","Cash runway projection"]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme before paint
+  try { var t = localStorage.getItem('pps.theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<style>
+:root{
+  --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --faint:#9b9b9b; --line:#e3e3e3; --soft:#f5f5f5; --card:#ffffff;
+  --btn-bg:#0a0a0a; --btn-fg:#ffffff; --g1:#0a0a0a; --g2:#4d4d4d; --g3:#808080; --g4:#b3b3b3; --g5:#d9d9d9;
+  --shadow:0 1px 0 rgba(0,0,0,.04);
+  --serif:'DM Serif Display',Georgia,serif; --sans:'DM Sans',system-ui,-apple-system,Segoe UI,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0d0d; --fg:#e8e8e8; --muted:#9a9a9a; --faint:#6e6e6e; --line:#2a2a2a; --soft:#161616; --card:#121212;
+    --btn-bg:#e8e8e8; --btn-fg:#0d0d0d; --g1:#e8e8e8; --g2:#b0b0b0; --g3:#808080; --g4:#555555; --g5:#333333;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d0d0d; --fg:#e8e8e8; --muted:#9a9a9a; --faint:#6e6e6e; --line:#2a2a2a; --soft:#161616; --card:#121212;
+  --btn-bg:#e8e8e8; --btn-fg:#0d0d0d; --g1:#e8e8e8; --g2:#b0b0b0; --g3:#808080; --g4:#555555; --g5:#333333;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:80px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:41;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;margin:0}
+h2{font-size:clamp(26px,3.4vw,34px);line-height:1.1}
+h3{font-size:21px;line-height:1.2}
+p{margin:0}
+a{color:inherit}
+.mono,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--btn-bg);background:var(--btn-bg);color:var(--btn-fg);padding:9px 15px;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;text-decoration:none;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--fg);opacity:1}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.preset:focus-visible,.drop:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+input[type=number],input[type=text],select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+input[type=number]:focus,input[type=text]:focus,select:focus,textarea:focus{border-color:var(--fg);outline:none}
+textarea{resize:vertical;font-family:var(--mono);font-size:13px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:transparent;margin:2px 0 0}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--line);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--fg);margin-top:-6.5px;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--fg)}
+input[type=range]::-moz-range-track{height:3px;background:var(--line);border-radius:3px}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--fg);border:2px solid var(--bg)}
+
+/* Header */
+.top{border-bottom:1px solid var(--line);background:var(--bg)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:58px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:21px;text-decoration:none;white-space:nowrap}
+.brand-mark{width:26px;height:26px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-family:var(--mono);font-size:13px}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font-size:13.5px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.nav a:hover{color:var(--fg);background:var(--soft)}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;flex:none}
+.icon-btn:hover{border-color:var(--fg)}
+
+/* Hero */
+.hero{padding:44px 0 36px;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(38px,5.6vw,68px);line-height:1.02;margin:14px 0 16px}
+.hero h1 em{font-style:italic}
+.hero p.lead{font-size:17px;color:var(--muted);max-width:520px}
+.hero .ctas{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.hero-photo{position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--soft)}
+.photo{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);display:block}
+.art{width:100%;height:100%;display:block}
+.art .bg{fill:var(--soft)} .art .k{fill:var(--g1)} .art .d{fill:var(--g2)} .art .m{fill:var(--g3)} .art .l{fill:var(--g4)} .art .x{fill:var(--g5)} .art .w{fill:var(--card)}
+.art .s{fill:none;stroke:var(--g1);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.art .s2{fill:none;stroke:var(--g3);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.art .sw{fill:none;stroke:var(--card);stroke-width:2.5;stroke-linecap:round}
+.art .sk{stroke:var(--g1);stroke-width:2.5}
+.hero-photo .caption{position:absolute;left:12px;bottom:12px;right:12px;display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:rgba(10,10,10,.82);color:#fff;font-family:var(--mono);font-size:12px;padding:5px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+
+/* Sticky profit bar */
+.livebar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:40;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.livebar .wrap{display:flex;align-items:center;gap:20px;min-height:54px;padding-top:6px;padding-bottom:6px}
+.lb-item{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.lb-item span:first-child{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.lb-item .num{font-size:17px;font-weight:500;white-space:nowrap}
+.lb-item.main .num{font-size:21px}
+.lb-actions{margin-left:auto;display:flex;gap:8px}
+.lb-verdict{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+
+/* Sections */
+.section{padding:36px 0;border-bottom:1px solid var(--line)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.sec-head p{color:var(--muted);max-width:620px;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.card h3{margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* Presets */
+.presets{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.preset{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);cursor:pointer;text-align:left;padding:0;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
+.preset:hover{border-color:var(--fg);transform:translateY(-2px)}
+.preset.active{border-color:var(--fg);box-shadow:0 0 0 1px var(--fg)}
+.preset .ph{aspect-ratio:4/3;overflow:hidden;background:var(--soft)}
+.preset .ph img{transition:transform .4s}
+.preset:hover .ph img{transform:scale(1.04)}
+.preset .body{padding:12px 14px 14px}
+.preset .name{font-family:var(--serif);font-size:20px}
+.preset .meta{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:2px}
+
+/* Import */
+.import-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.drop{border:1.5px dashed var(--g4);border-radius:14px;padding:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;min-height:220px;transition:background .15s,border-color .15s}
+.drop.over{background:var(--soft);border-color:var(--fg)}
+.drop strong{font-family:var(--serif);font-weight:400;font-size:23px}
+.drop .types{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.progress{width:100%;max-width:340px;margin-top:6px}
+.progress .track{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress .bar{height:100%;width:0;background:var(--fg);transition:width .2s}
+.progress span{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.detected{margin-top:16px}
+.det-table td input[type=number]{width:120px;padding:5px 8px}
+.conf{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.conf.high{border-color:var(--fg);color:var(--fg)}
+.src{font-family:var(--mono);font-size:12px;color:var(--muted);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start;padding-top:28px;padding-bottom:28px}
+.inputs{position:sticky;top:70px;max-height:calc(100vh - 84px);overflow:auto;padding:18px}
+.inputs h3{margin-bottom:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:10px}
+.seg button{border:0;background:transparent;padding:6px 8px;border-radius:999px;cursor:pointer;font-size:13.5px;color:var(--muted)}
+.seg button.on{background:var(--btn-bg);color:var(--btn-fg)}
+.group-title{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+.field{padding:6px 0}
+.field.inactive{opacity:.45}
+.field-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.field label{font-size:13.5px}
+.num-wrap{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--card);width:118px;flex:none;padding:0 8px}
+.num-wrap:focus-within{border-color:var(--fg)}
+.num-wrap input{border:0;padding:6px 0;text-align:right;font-family:var(--mono);font-size:13.5px;background:transparent;-moz-appearance:textfield}
+.num-wrap input::-webkit-outer-spin-button,.num-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.num-wrap .u{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.hint{font-size:11.5px;color:var(--faint)}
+.results{display:flex;flex-direction:column;gap:16px;min-width:0}
+.rsec{scroll-margin-top:70px}
+
+/* Overview */
+.overview{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:center}
+.gauge svg{width:100%;height:auto;display:block}
+.verdict h3{font-size:28px}
+.verdict p{color:var(--muted);margin-top:6px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.kpi .lbl{font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:4px 6px;align-items:center;flex-wrap:wrap}
+.kpi .val{font-family:var(--mono);font-size:24px;font-weight:500;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .foot{font-size:12px;color:var(--muted);margin-top:2px}
+.badge{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);white-space:nowrap;color:var(--muted)}
+.badge.t10{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.badge.t25{border-color:var(--fg);color:var(--fg)}
+.badge.avg{border-color:var(--g3);color:var(--fg)}
+.badge.below{border-style:dashed;border-color:var(--g3)}
+
+/* Breakdown */
+.stackbar{position:relative;display:flex;height:40px;border-radius:8px;overflow:hidden;background:var(--soft);margin:6px 0 10px}
+.stackbar div{height:100%;min-width:0}
+.sw-fg{background:var(--g1)} .sw-g2{background:var(--g2)} .sw-g3{background:var(--g3)} .sw-g4{background:var(--g4)} .sw-g5{background:var(--g5)}
+.sw-hatch{background:repeating-linear-gradient(135deg,var(--g3) 0 4px,var(--g5) 4px 8px)}
+.price-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--fg)}
+.legend{display:flex;flex-direction:column;gap:4px}
+.legend .li{display:grid;grid-template-columns:14px minmax(0,1fr) auto auto;gap:10px;align-items:center;font-size:13.5px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.legend .li:last-child{border-bottom:0}
+.legend .sw{width:12px;height:12px;border-radius:3px}
+.legend .num{text-align:right}
+.legend .pc{color:var(--muted);width:52px;text-align:right;font-family:var(--mono);font-size:12px}
+.be{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.be-item{border:1px solid var(--line);border-radius:12px;padding:12px}
+.be-item .lbl{font-size:12.5px;color:var(--muted)}
+.be-item .val{font-family:var(--mono);font-size:20px;margin-top:2px}
+.be-item .cmp{font-size:12px;margin-top:4px;color:var(--muted)}
+.be-item .ok{color:var(--fg);font-weight:600}
+
+/* Insights */
+.insights{display:flex;flex-direction:column}
+.ins{display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.ins:last-child{border-bottom:0}
+.ins .t{font-weight:600}
+.ins .b{color:var(--muted);font-size:14px;margin-top:2px}
+.sev{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:999px;border:1px solid var(--line);height:max-content;text-align:center;color:var(--muted)}
+.sev.s3{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sev.s2{border-color:var(--fg);color:var(--fg)}
+.sev.s0{border-style:dashed}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-weight:500;color:var(--muted);text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+.rank{font-family:var(--mono);width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:12px}
+tr.top1 .rank{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.minibar{height:6px;background:var(--soft);border-radius:6px;min-width:60px;overflow:hidden}
+.minibar div{height:100%;background:var(--fg)}
+.pos{font-weight:600}
+.neg{color:var(--muted)}
+
+/* What-if */
+.wi-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.wi-slider{padding:6px 0}
+.wi-slider .field-top .num{font-size:13px;min-width:56px;text-align:right}
+.scen-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.scen{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;flex-wrap:wrap}
+.scen .nm{font-weight:500;flex:1;min-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Charts */
+.chart-wrap{position:relative;width:100%}
+.chart-wrap svg{width:100%;height:auto;display:block;overflow:visible;touch-action:pan-y}
+.ax{font-family:var(--mono);font-size:10.5px;fill:var(--muted)}
+.gridl{stroke:var(--line);stroke-width:1}
+.zero{stroke:var(--g3);stroke-width:1;stroke-dasharray:3 3}
+.s-main{stroke:var(--fg);stroke-width:2.2;fill:none}
+.s-alt{stroke:var(--g3);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+.s-alt2{stroke:var(--g3);stroke-width:1.8;fill:none}
+.s-alt3{stroke:var(--g4);stroke-width:1.6;fill:none;stroke-dasharray:2 3}
+.area{fill:var(--fg);opacity:.06}
+.mk{stroke:var(--fg);stroke-width:1;stroke-dasharray:2 3}
+.mk-lbl{font-family:var(--mono);font-size:10.5px;fill:var(--fg)}
+.dot{fill:var(--bg);stroke:var(--fg);stroke-width:2}
+.cross{stroke:var(--fg);stroke-width:1;opacity:.5}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font-family:var(--mono);font-size:12px;padding:7px 9px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity .1s;z-index:5;line-height:1.45}
+.tip.on{opacity:1}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:6px}
+.chart-legend i{display:inline-block;width:18px;height:0;border-top:2px solid var(--fg);vertical-align:middle;margin-right:6px}
+.chart-legend i.alt{border-top:2px dashed var(--g3)}
+.chart-legend i.alt2{border-top:2px solid var(--g3)}
+.chart-legend i.alt3{border-top:2px dotted var(--g4)}
+.bar-pos{fill:var(--fg)}
+.bar-neg{fill:var(--g4)}
+.spark{width:100%;height:44px;display:block}
+.spark path{fill:none;stroke:var(--fg);stroke-width:1.6}
+.spark circle{fill:var(--fg)}
+.solver-out{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+
+/* Benchmarks */
+.tierbar{position:relative;height:6px;background:var(--soft);border-radius:6px;min-width:110px}
+.tierbar .tk{position:absolute;top:-3px;width:1px;height:12px;background:var(--g3)}
+.tierbar .you{position:absolute;top:-4px;width:10px;height:14px;margin-left:-5px;border-radius:3px;background:var(--fg)}
+
+/* History */
+.sparks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.spark-card{border:1px solid var(--line);border-radius:12px;padding:12px}
+.spark-card .lbl{font-size:12.5px;color:var(--muted)}
+.spark-card .val{font-family:var(--mono);font-size:18px}
+.alerts{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.alert{border:1px solid var(--fg);border-left-width:4px;border-radius:10px;padding:10px 12px;font-size:14px}
+.alert .when{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px;padding:14px;border:1px dashed var(--line);border-radius:10px;text-align:center}
+
+/* Share */
+.code-box{font-family:var(--mono);font-size:12px;word-break:break-all;background:var(--soft);border-radius:10px;padding:10px 12px;max-height:90px;overflow:auto}
+.cmp-better{font-weight:600}
+
+/* Guide banner + FAQ */
+.guide{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--fg);border-radius:14px;padding:14px 16px;background:var(--card)}
+.guide .gt{font-weight:600}
+.guide .gb{color:var(--muted);font-size:14px;margin-top:2px;max-width:640px}
+.guide .row{flex:0 1 auto;min-width:0}
+.lb-goal{min-width:96px}
+.lb-goal .gbar{height:4px;background:var(--line);border-radius:4px;margin-top:4px;overflow:hidden}
+.lb-goal .gbar div{height:100%;background:var(--fg)}
+.faq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 32px}
+.faq details{border-bottom:1px solid var(--line);padding:14px 0}
+.faq summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-family:var(--mono);color:var(--muted)}
+.faq details[open] summary::after{content:'−'}
+.faq details p{color:var(--muted);margin-top:8px;font-size:14.5px;max-width:62ch}
+.formula{font-family:var(--mono);font-size:13px;background:var(--soft);border-radius:10px;padding:12px 14px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+
+/* Landing */
+.v-app .nav-landing,.v-app .hdr-cta,.v-landing .nav-app{display:none}
+.trust{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px;max-width:620px}
+.steps div{border-top:1px solid var(--fg);padding-top:8px;font-size:13.5px;color:var(--muted)}
+.steps b{display:block;color:var(--fg);font-weight:600;font-family:var(--mono);font-size:12px}
+.qgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.qcard{border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.qcard h3{font-size:24px}
+.qnum{font-size:30px;font-weight:500;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.qnum small{display:block;font-size:12px;color:var(--muted);font-weight:400;font-family:var(--sans)}
+.fgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 24px}
+.fgrid > div{border-top:1px solid var(--line);padding-top:14px;min-width:0}
+.fgrid h3{font-size:20px;margin:8px 0 6px}
+.fgrid p{color:var(--muted);font-size:14px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.privacy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px;align-items:start}
+.pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.pgrid p{font-size:14px;margin-top:4px}
+.band{background:var(--fg);color:var(--bg);padding:64px 0;text-align:left}
+.band h2{font-size:clamp(30px,4.4vw,48px);max-width:720px}
+.band p{opacity:.75;margin:10px 0 22px}
+.band .btn{background:var(--bg);color:var(--fg);border-color:var(--bg)}
+@media (max-width:1000px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.qgrid{grid-template-columns:minmax(0,1fr)}.privacy{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){.faq{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.steps,.pgrid,.fgrid{grid-template-columns:minmax(0,1fr)}.lb-goal{display:none}.band{padding:44px 0}}
+@media (max-width:420px){.brand{font-size:18px;gap:8px}.brand-mark{width:22px;height:22px;font-size:11px}.top .wrap{gap:8px}}
+@media (max-width:360px){.hdr-cta{display:none}}
+
+/* Summary */
+pre.summary{font-family:var(--mono);font-size:12px;background:var(--soft);border-radius:10px;padding:14px;max-height:340px;overflow:auto;white-space:pre-wrap;word-break:break-word;margin:12px 0 0}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--btn-bg);color:var(--btn-fg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:all .2s;z-index:60;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{padding:28px 0 60px;color:var(--muted);font-size:13px}
+
+/* Responsive */
+@media (max-width:1100px){
+  .presets{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .overview{grid-template-columns:200px minmax(0,1fr)}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .inputs{position:static;max-height:none}
+  .hero .wrap{grid-template-columns:minmax(0,1fr);gap:24px}
+  .import-grid,.grid2,.wi-grid{grid-template-columns:minmax(0,1fr)}
+  .lb-verdict{display:none}
+  .nav{display:none}
+}
+@media (max-width:640px){
+  .wrap{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+  .presets{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .presets .preset:last-child{grid-column:span 2}
+  .presets .preset:last-child .ph{aspect-ratio:8/3}
+  .overview{grid-template-columns:minmax(0,1fr)}
+  .gauge{max-width:240px;margin:0 auto}
+  .verdict{text-align:center}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi .val{font-size:20px}
+  .be,.solver-out{grid-template-columns:minmax(0,1fr)}
+  .sparks{grid-template-columns:minmax(0,1fr)}
+  .ins{grid-template-columns:minmax(0,1fr);gap:6px}
+  .sev{justify-self:start}
+  .livebar .wrap{gap:14px}
+  .lb-hide-sm{display:none}
+  .lb-actions .btn{padding:7px 11px}
+  .lb-actions .lb-share{display:none}
+  .card{padding:16px}
+  .hero{padding:28px 0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{.livebar,.top .nav,.icon-btn,.lb-actions{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#home"><span class="brand-mark">%</span>Profit &amp; Pricing</a>
+    <nav class="nav nav-landing" aria-label="Page">
+      <a href="#questions">What it answers</a><a href="#features">Features</a><a href="#models">Business models</a><a href="#faq">FAQ</a>
+    </nav>
+    <nav class="nav nav-app" aria-label="Sections">
+      <a href="#presets">Presets</a><a href="#import">Import</a><a href="#overview">Results</a><a href="#lab">What-if</a><a href="#pricing">Pricing</a><a href="#bench">Benchmarks</a><a href="#cohort">Cohorts</a><a href="#cash">Cash</a><a href="#history">History</a><a href="#share">Share</a>
+    </nav>
+    <div class="row" style="flex:none;flex-wrap:nowrap">
+      <a class="btn sm hdr-cta" href="#app">Open simulator</a>
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="landing">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Free profit calculator for online businesses</div>
+      <h1>Know your margin <em>before</em> you scale.</h1>
+      <p class="lead">See what every sale really earns after refunds, fees, delivery and ads, what price to charge, and how long your cash lasts. Drop in a dashboard screenshot or type your numbers. Results update as you type.</p>
+      <div class="ctas">
+        <a class="btn" href="#app">Open the simulator</a>
+        <a class="btn ghost" href="#app" data-then="import">Import a screenshot</a>
+      </div>
+      <div class="trust">Free · No sign-up · Your numbers never leave your browser</div>
+      <div class="steps" aria-label="How it works">
+        <div><b>1 · Pick a model</b>Start from a preset close to your business.</div>
+        <div><b>2 · Add your numbers</b>Type them, or drop in a dashboard screenshot.</div>
+        <div><b>3 · Track monthly</b>Save a snapshot each month and watch the trend.</div>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="media" id="heroMedia" style="width:100%;height:100%"></div>
+      <div class="caption"><span class="chip" id="heroChip1">—</span><span class="chip" id="heroChip2">—</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="questions">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Three questions, answered in five minutes</h2><p>Shown here for an example online store doing about 880 orders a month. Open the simulator to run your own.</p></div></div>
+    <div class="qgrid">
+      <div class="qcard"><div class="eyebrow">Profit per sale</div><h3>Do I make money on each sale?</h3><div class="qnum mono" id="qPps">—</div><p class="muted">What's left of a sale after refunds, delivery, payment fees and the ad spend it took to win the customer. Plus the four break-evens that tell you how far you are from the line.</p></div>
+      <div class="qcard"><div class="eyebrow">Pricing</div><h3>What should I charge?</h3><div class="qnum mono" id="qPrice">—</div><p class="muted">A price-sensitivity curve that accounts for lost conversions, the profit-maximising price, and a solver that finds the price for the monthly profit you want.</p></div>
+      <div class="qcard"><div class="eyebrow">Cash</div><h3>How long will my cash last?</h3><div class="qnum mono" id="qRunway">—</div><p class="muted">Runway, run-out date and a 12-month cash projection that includes your next inventory buy, so a big purchase never catches you short.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Everything a finance lead would check</h2><p>Without the spreadsheet, the consultant or the sign-up form.</p></div></div>
+    <div class="fgrid">
+      <div><span class="tag">Import</span><h3>Screenshot to numbers</h3><p>Drop a Shopify, Stripe or analytics screenshot. Text recognition runs in your browser and you approve every value.</p></div>
+      <div><span class="tag">Import</span><h3>CSV, JSON or pasted text</h3><p>Daily exports are summed, rates averaged, and AOV or conversion worked out when they're missing.</p></div>
+      <div><span class="tag">Diagnosis</span><h3>Health score and verdict</h3><p>One score out of 100, a plain-language verdict and insights ranked by urgency.</p></div>
+      <div><span class="tag">Priorities</span><h3>Five levers, ranked</h3><p>See whether price, conversion, ad spend, delivery cost or retention moves profit most.</p></div>
+      <div><span class="tag">Planning</span><h3>What-if lab</h3><p>Test changes without touching your real inputs, save scenarios and compare any two side by side.</p></div>
+      <div><span class="tag">Context</span><h3>Benchmarks</h3><p>Average, top-25% and top-10% tiers for conversion, margin, LTV:CAC, CAC and churn in your model.</p></div>
+      <div><span class="tag">Subscriptions</span><h3>Cohort LTV</h3><p>A 24-month retention curve, payback month and what early, current and improved cohorts earn.</p></div>
+      <div><span class="tag">Habit</span><h3>Monthly history and alerts</h3><p>Snapshots with trend lines, plus a warning when margin drops 5 points or CAC jumps 20%.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="models">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Built for your business model</h2><p>Pick the closest one. It loads typical numbers you can replace with yours.</p></div></div>
+    <div class="presets" data-grid="landing"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap privacy">
+    <div><h2>Your numbers stay yours</h2></div>
+    <div class="pgrid">
+      <div><b>No account</b><p class="muted">Open the page and start. Nothing to sign up for.</p></div>
+      <div><b>Nothing uploaded</b><p class="muted">Calculations and screenshot reading happen on your device.</p></div>
+      <div><b>Yours to keep</b><p class="muted">History is saved in this browser. Back it up to a file any time.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>How it's calculated</h2><p>Every number in the simulator comes from these formulas.</p></div></div>
+    <div class="formula">Fee per sale = price × fee% + $0.30<br>Net revenue = price × (1 − refund rate)<br>Contribution = net revenue − delivery cost − fee<br>New customers = visitors × conversion · CAC = ad spend ÷ new customers<br>Profit per sale = contribution − CAC<br>Monthly profit = new customers × contribution − ad spend − fixed costs<br>LTV (one-time) = contribution × orders per customer · LTV (subscription) = contribution × 1 ÷ churn, capped at 60 months</div>
+    <div class="faq" style="margin-top:20px">
+      <details><summary>What is a good LTV:CAC ratio?</summary><p>A common rule of thumb is 3× or better: each customer brings in three times what it cost to acquire them. Below 1× you lose money on every customer. Far above 5× often means you could spend more on growth.</p></details>
+      <details><summary>How do I calculate my break-even price?</summary><p>Divide your monthly ad spend and fixed costs by the customers you win each month, add delivery cost and the $0.30 fixed fee, then divide by (1 − refund rate − fee rate). The Break-evens card does this live.</p></details>
+      <details><summary>What is contribution margin?</summary><p>The share of each sale you keep after refunds, delivery or cost of goods, and payment fees, before ads and fixed costs. It shows how much each sale can put toward acquisition and overhead.</p></details>
+      <details><summary>Why is my SaaS monthly profit so low?</summary><p>Monthly profit counts only this month's new customers, so recurring revenue from existing subscribers is not included. The Cohort LTV section shows what each month's customers earn over two years.</p></details>
+      <details><summary>Can I import numbers from Shopify, Stripe or Google Analytics?</summary><p>Yes, as a screenshot or an export. Drop a dashboard screenshot, a CSV or JSON export, or paste report text. The importer looks for labels such as sessions, conversion rate, AOV, ad spend, refunds and churn, and asks you to approve each value.</p></details>
+      <details><summary>Is my data private?</summary><p>Yes. Calculations, screenshot reading and history all run in your browser. Snapshots and scenarios are stored on this device only; use Back up to keep a copy or move them to another device.</p></details>
+      <details><summary>How does price elasticity work here?</summary><p>Elasticity sets how conversion reacts to price. At 1.0, a 10% price rise loses about 10% of conversions. The price chart and the solver use it to find the price that maximises monthly profit.</p></details>
+      <details><summary>How should I use this every month?</summary><p>Update the inputs that changed, then save a snapshot. History draws profit, margin and CAC trends and warns you when margin drops 5+ points or CAC rises 20%+.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Run your numbers in the next five minutes.</h2>
+    <p>Free, private, and it keeps working as your business grows.</p>
+    <a class="btn" href="#app">Open the simulator</a>
+  </div>
+</section>
+</div>
+
+<div id="appView">
+<div class="livebar" role="status" aria-live="polite">
+  <div class="wrap">
+    <div class="lb-item main"><span>Monthly profit</span><span class="num" id="lbMonthly">—</span></div>
+    <div class="lb-item"><span>Per sale</span><span class="num" id="lbPps">—</span></div>
+    <div class="lb-item lb-hide-sm"><span>LTV:CAC</span><span class="num" id="lbLtv">—</span></div>
+    <div class="lb-item lb-hide-sm"><span>Health</span><span class="num" id="lbHealth">—</span></div>
+    <div class="lb-item lb-goal" title="Progress toward your monthly profit target (set it in Price sensitivity)"><span>Goal</span><span class="num" id="lbGoal" style="font-size:14px">—</span><div class="gbar"><div id="lbGoalBar" style="width:0"></div></div></div>
+    <div class="lb-verdict" id="lbVerdict"></div>
+    <div class="lb-actions">
+      <button class="btn ghost sm lb-share" id="lbShare">Copy link</button>
+      <button class="btn sm" id="lbSnap">Save snapshot</button>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="presets">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><h2>Start from a business model</h2><p>Each preset loads typical numbers for that model. Change anything afterwards.</p></div>
+    </div>
+    <div class="presets" id="presetGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="import">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><h2>Import center</h2><p>Screenshots are read with OCR in your browser. Exports and pasted text are scanned for familiar labels. You approve every value before it touches the inputs.</p></div>
+    </div>
+    <div class="import-grid">
+      <div class="drop" id="drop" tabindex="0" aria-label="Drop a file to import">
+        <strong>Drop a screenshot or export</strong>
+        <div class="types">PNG · JPG · WEBP · CSV · TSV · TXT · JSON</div>
+        <div class="muted small">or paste an image or text anywhere on the page (Ctrl/⌘+V)</div>
+        <div class="row" style="justify-content:center;margin-top:6px">
+          <label class="btn">Choose file<input type="file" id="fileIn" multiple accept="image/*,.csv,.tsv,.txt,.json,text/plain,text/csv,application/json" hidden></label>
+          <button class="btn ghost" id="pasteBtn">Paste from clipboard</button>
+        </div>
+        <div class="progress" id="progress" hidden><div class="track"><div class="bar" id="progBar"></div></div><span id="progTxt">Loading OCR…</span></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <label for="importText" style="font-weight:500">Paste report text</label>
+        <textarea id="importText" rows="8" placeholder="Sessions: 48,210&#10;Conversion rate 2.3%&#10;Average order value $64.50&#10;Ad spend $12,400&#10;Refund rate 5%"></textarea>
+        <div class="row">
+          <button class="btn" id="extractBtn">Extract values</button>
+          <button class="btn ghost" id="sampleBtn">Try a sample report</button>
+        </div>
+      </div>
+    </div>
+    <div class="card detected" id="detected" hidden>
+      <div class="sec-head" style="margin-bottom:10px">
+        <div><h3>Detected values</h3><p class="small" id="detSource"></p></div>
+        <div class="row"><button class="btn ghost sm" id="detDiscard">Discard</button><button class="btn sm" id="detApply">Apply selected</button></div>
+      </div>
+      <div class="tbl-wrap"><table class="det-table"><thead><tr><th></th><th>Field</th><th>Detected</th><th class="num">Current</th><th>Confidence</th><th>Source</th></tr></thead><tbody id="detBody"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap layout">
+  <aside class="card inputs" id="inputs" aria-label="Inputs">
+    <h3>Your numbers</h3>
+    <div class="seg" role="group" aria-label="Revenue model">
+      <button data-model="onetime">One-time</button>
+      <button data-model="subscription">Subscription</button>
+    </div>
+    <label class="small muted" for="bizSel">Benchmark against</label>
+    <select id="bizSel" style="margin-top:4px"></select>
+    <div id="fields"></div>
+  </aside>
+
+  <div class="results">
+    <!-- Overview -->
+    <div class="guide" id="guide" hidden>
+      <div><div class="gt" id="guideT"></div><div class="gb" id="guideB"></div></div>
+      <div class="row" id="guideBtns"></div>
+    </div>
+    <section class="card rsec" id="overview">
+      <div class="overview">
+        <div class="gauge" id="gauge"></div>
+        <div class="verdict"><div class="eyebrow">Verdict</div><h3 id="verdictTitle">—</h3><p id="verdictBody"></p></div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <div class="grid2">
+      <section class="card rsec">
+        <h3>Where each sale goes</h3>
+        <p class="sub" id="bdSub">Per-sale breakdown of the price.</p>
+        <div class="stackbar" id="stackbar"></div>
+        <div class="legend" id="legend"></div>
+      </section>
+      <section class="card rsec">
+        <h3>Break-evens</h3>
+        <p class="sub">What it takes for the month — or a single sale — to stop losing money.</p>
+        <div class="be" id="breakevens"></div>
+      </section>
+    </div>
+
+    <section class="card rsec" id="insightsCard">
+      <h3>Insights</h3>
+      <p class="sub">Ranked by urgency.</p>
+      <div class="insights" id="insights"></div>
+    </section>
+
+    <section class="card rsec" id="levers">
+      <h3>Five levers, ranked</h3>
+      <p class="sub">A 10% improvement on each lever, holding everything else constant. Ranked by the lifetime profit of one month's customers.</p>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Lever</th><th class="num">Δ Monthly profit</th><th class="num">Δ Cohort value</th><th class="num">New LTV:CAC</th><th></th></tr></thead><tbody id="leverBody"></tbody></table></div>
+      <p class="small muted" style="margin-top:10px" id="leverNote"></p>
+    </section>
+
+    <section class="card rsec" id="lab">
+      <h3>What-if lab</h3>
+      <p class="sub">Move the dials without touching your inputs. Save scenarios to compare later.</p>
+      <div class="wi-grid">
+        <div id="wiSliders"></div>
+        <div>
+          <div class="tbl-wrap"><table><thead><tr><th>Metric</th><th class="num">Now</th><th class="num">What-if</th><th class="num">Δ</th></tr></thead><tbody id="wiBody"></tbody></table></div>
+          <div class="row" style="margin-top:12px">
+            <input type="text" id="scenName" placeholder="Scenario name" style="flex:1;min-width:140px">
+            <button class="btn sm" id="scenSave">Save scenario</button>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn ghost sm" id="wiReset">Reset dials</button>
+            <button class="btn ghost sm" id="wiApply">Apply to inputs</button>
+          </div>
+          <div class="scen-list" id="scenList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card rsec" id="pricing">
+      <h3>Price sensitivity</h3>
+      <p class="sub">Monthly profit across prices. Solid line: conversion reacts to price with your elasticity. Dashed: conversion stays put. Hover or tap the chart.</p>
+      <div class="field" style="max-width:420px">
+        <div class="field-top"><label for="elastIn">Price elasticity</label><div class="num-wrap"><input id="elastIn" type="number" step="0.1" min="0" max="5"><span class="u">e</span></div></div>
+        <input type="range" id="elastRange" min="0" max="4" step="0.05" aria-label="Price elasticity">
+        <div class="hint">1.0 = a 10% price rise loses ~10% of conversions. Most products sit between 0.5 and 2.</div>
+      </div>
+      <div id="priceChart" style="margin-top:8px"></div>
+      <div class="chart-legend"><span><i></i>With elasticity</span><span><i class="alt"></i>Conversion held</span></div>
+      <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:16px">
+        <h3>Target-profit price solver</h3>
+        <div class="row" style="margin-top:10px">
+          <label for="targetIn" class="small">Monthly profit target</label>
+          <div class="num-wrap" style="width:160px"><span class="u">$</span><input id="targetIn" type="number" step="100"></div>
+        </div>
+        <div class="solver-out" id="solverOut"></div>
+      </div>
+    </section>
+
+    <section class="card rsec" id="bench">
+      <div class="sec-head" style="margin-bottom:6px">
+        <div><h3>Benchmarks</h3><p class="small">Rough tiers from typical public figures, hardcoded. Use them as a compass, not a scorecard.</p></div>
+        <select id="benchSel" style="width:auto"></select>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>Metric</th><th class="num">You</th><th class="num">Average</th><th class="num">Top 25%</th><th class="num">Top 10%</th><th>Position</th><th>Tier</th></tr></thead><tbody id="benchBody"></tbody></table></div>
+    </section>
+
+    <section class="card rsec" id="cohort">
+      <h3>Cohort LTV</h3>
+      <p class="sub" id="cohortSub">How a month's customers decay and pay back over 24 months.</p>
+      <div id="cohortNote"></div>
+      <div id="cohortChart"></div>
+      <div class="chart-legend"><span><i class="alt3"></i>Early cohort</span><span><i></i>Current</span><span><i class="alt2"></i>Improved</span></div>
+      <div class="tbl-wrap" style="margin-top:14px"><table><thead><tr><th>Cohort</th><th class="num">Churn</th><th class="num">Month 1</th><th class="num">Month 3</th><th class="num">Month 6</th><th class="num">Month 12</th><th class="num">LTV</th><th class="num">Payback</th></tr></thead><tbody id="cohortBody"></tbody></table></div>
+      <p class="small muted" style="margin-top:8px">Profit collected per customer, net of CAC. Early = churn 1.5× current; improved = churn 0.7× current.</p>
+    </section>
+
+    <section class="card rsec" id="cash">
+      <h3>Cash &amp; runway</h3>
+      <p class="sub">Starts from cash on hand, adds the monthly cash swing (monthly profit) and subtracts the inventory buy in its month. Edit cash inputs in the panel.</p>
+      <div class="be" id="cashKpis" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div>
+      <div id="cashChart" style="margin-top:14px"></div>
+    </section>
+
+    <section class="card rsec" id="history">
+      <div class="sec-head" style="margin-bottom:10px">
+        <div><h3>History</h3><p class="small">Snapshots are saved in this browser and survive reloads.</p></div>
+        <div class="row"><button class="btn sm" id="snapBtn">Save snapshot</button><button class="btn ghost sm" id="remindBtn">Monthly reminder</button><button class="btn ghost sm" id="backupBtn">Back up</button><label class="btn ghost sm">Restore<input type="file" id="restoreIn" accept=".json,application/json" hidden></label><button class="btn ghost sm" id="histClear">Clear</button></div>
+      </div>
+      <div class="sparks" id="sparks"></div>
+      <div class="alerts" id="alerts"></div>
+      <div class="tbl-wrap"><table><thead><tr><th>When</th><th>Label</th><th class="num">Monthly profit</th><th class="num">Margin</th><th class="num">CAC</th><th class="num">Health</th><th></th></tr></thead><tbody id="histBody"></tbody></table></div>
+    </section>
+
+    <section class="card rsec" id="share">
+      <h3>Share &amp; compare</h3>
+      <p class="sub" id="shareHint">Your inputs as a URL-safe code. The page address updates as you work, so the link always reflects what you see.</p>
+      <div class="code-box" id="codeBox"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn sm" id="copyCode">Copy code</button>
+        <button class="btn ghost sm" id="copyLink">Copy link</button>
+        <button class="btn ghost sm" id="shareResult">Share my result</button>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <input type="text" id="loadCode" placeholder="Paste a code or link" style="flex:1;min-width:180px">
+        <button class="btn ghost sm" id="loadCodeBtn">Load</button>
+      </div>
+      <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:16px">
+        <h3>A vs B</h3>
+        <div class="grid2" style="margin:10px 0">
+          <label class="small">A<select id="cmpA" style="margin-top:4px"></select></label>
+          <label class="small">B<select id="cmpB" style="margin-top:4px"></select></label>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>Metric</th><th class="num">A</th><th class="num">B</th><th class="num">B − A</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="card rsec" id="summary">
+      <div class="sec-head" style="margin-bottom:0">
+        <div><h3>Summary</h3><p class="small">Plain text, ready for an email or a doc.</p></div>
+        <div class="row"><button class="btn sm" id="copySum">Copy</button><button class="btn ghost sm" id="dlSum">Download .txt</button></div>
+      </div>
+      <pre class="summary" id="sumPre"></pre>
+    </section>
+  </div>
+</main>
+</div>
+
+<footer><div class="wrap"><a href="#faq">How it's calculated</a> · All calculations run locally. Fee per sale = price × fee% + $0.30. Benchmarks are rough, hardcoded tiers.<span id="photoCredit"> Photographs via Unsplash.</span></div></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MINUS = '−';
+const IN_FRAME = (() => { try { return window.self !== window.top; } catch(e){ return true; } })();
+function f$(v, dp){
+  if (v === Infinity) return '∞';
+  if (v === -Infinity) return MINUS + '∞';
+  if (!isFinite(v)) return '—';
+  const a = Math.abs(v);
+  if (dp == null) dp = a >= 1000 ? 0 : 2;
+  const s = '$' + a.toLocaleString('en-US', {minimumFractionDigits:dp, maximumFractionDigits:dp});
+  return (v < 0 && a >= Math.pow(10,-dp)/2 ? MINUS : '') + s;
+}
+function fK(v){ // compact money
+  if (!isFinite(v)) return '—';
+  const a = Math.abs(v), sg = v < 0 ? MINUS : '';
+  if (a >= 1e6) return sg + '$' + (a/1e6).toFixed(a >= 1e7 ? 0 : 1) + 'M';
+  if (a >= 1e3) return sg + '$' + (a/1e3).toFixed(a >= 1e4 ? 0 : 1) + 'k';
+  return sg + '$' + a.toFixed(a < 10 && a % 1 ? 1 : 0);
+}
+function fN(v, dp=0){ if (!isFinite(v)) return v > 0 ? '∞' : '—'; return (v<0?MINUS:'') + Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp}); }
+function fP(v, dp=1){ if (!isFinite(v)) return '—'; return (v<0?MINUS:'') + Math.abs(v).toFixed(dp) + '%'; }
+function fX(v){ if (v === Infinity) return '∞'; if (!isFinite(v)) return '—'; return v.toFixed(v >= 10 ? 0 : 1) + '×'; }
+function signed(v, fn){ if (!isFinite(v)) return '—'; return (v > 0 ? '+' : '') + fn(v); }
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('on'), 2400); }
+async function copyText(txt){
+  try { await navigator.clipboard.writeText(txt); return true; }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch(_){}
+    ta.remove(); return ok;
+  }
+}
+function niceTicks(min, max, n=5){
+  if (!isFinite(min) || !isFinite(max)) { min = 0; max = 1; }
+  if (min === max){ const d = Math.abs(min) || 1; min -= d/2; max += d/2; }
+  const step0 = (max-min)/n, mag = Math.pow(10, Math.floor(Math.log10(step0))), norm = step0/mag;
+  const step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+  const t = []; for (let v = Math.floor(min/step)*step; v <= Math.ceil(max/step)*step + step/2; v += step) t.push(+v.toFixed(10));
+  return t;
+}
+function niceCeil(v){ if (v <= 0) return 1; const m = Math.pow(10, Math.floor(Math.log10(v))); const n = v/m; return (n<=1?1:n<=2?2:n<=5?5:10)*m; }
+
+/* ---------- data ---------- */
+const PHOTO = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=640&h=480&q=70&sat=-100`;
+const PRESETS = {
+  ecommerce:{name:'E-commerce', meta:'$68 AOV · 1.8 orders', photo:'photo-1441986300917-64674bd600d8', alt:'Black-and-white photograph of a clothing store interior',
+    s:{model:'onetime', biz:'ecommerce', price:68, delivery:22, feePct:2.9, refund:6, visitors:42000, conv:2.1, ad:14000, fixed:9000, orders:1.8, churn:6, cash:60000, invBuy:25000, invMonth:3, elast:1.4, target:20000}},
+  saas:{name:'SaaS', meta:'$79/mo · 4% churn', photo:'photo-1460925895917-afdab827c52f', alt:'Black-and-white photograph of a laptop showing analytics charts',
+    s:{model:'subscription', biz:'saas', price:79, delivery:9, feePct:2.9, refund:2, visitors:30000, conv:1.8, ad:16000, fixed:12000, orders:1, churn:4, cash:150000, invBuy:0, invMonth:1, elast:0.9, target:15000}},
+  course:{name:'Course', meta:'$297 · launch', photo:'photo-1522202176988-66273c2fd55f', alt:'Black-and-white photograph of students studying together with laptops',
+    s:{model:'onetime', biz:'course', price:297, delivery:12, feePct:3.5, refund:8, visitors:25000, conv:1.2, ad:30000, fixed:6000, orders:1.3, churn:10, cash:40000, invBuy:0, invMonth:1, elast:1.1, target:50000}},
+  agency:{name:'Agency', meta:'$4.5k retainer', photo:'photo-1552664730-d307ca884978', alt:'Black-and-white photograph of a team meeting around a whiteboard',
+    s:{model:'subscription', biz:'agency', price:4500, delivery:2600, feePct:1, refund:1, visitors:3000, conv:0.5, ad:6000, fixed:18000, orders:1, churn:6, cash:80000, invBuy:0, invMonth:1, elast:0.7, target:10000}},
+  creator:{name:'Creator', meta:'$12/mo membership', photo:'photo-1478737270239-2f02b77fc618', alt:'Black-and-white photograph of a studio microphone',
+    s:{model:'subscription', biz:'creator', price:12, delivery:1.5, feePct:8, refund:1, visitors:60000, conv:0.9, ad:2500, fixed:1500, orders:1, churn:7, cash:12000, invBuy:0, invMonth:1, elast:1.6, target:5000}}
+};
+const BIZ_NAMES = {ecommerce:'E-commerce', saas:'SaaS', course:'Course', agency:'Agency', creator:'Creator'};
+// v = [average, top 25%, top 10%]; dir 1 = higher is better
+const BENCH = {
+  ecommerce:{conv:[1.8,2.8,4.0], margin:[35,45,55], ltvcac:[2,3,4.5], cacPct:[30,20,12], churn:[8,5,3]},
+  saas:     {conv:[1.2,2.5,4.0], margin:[70,80,88], ltvcac:[3,4.5,6], cacPct:[600,350,200], churn:[5,3,1.5]},
+  course:   {conv:[1.5,3.0,5.0], margin:[75,85,92], ltvcac:[2,3.5,5], cacPct:[40,25,15], churn:[10,6,4]},
+  agency:   {conv:[1.0,2.0,3.5], margin:[35,50,60], ltvcac:[4,7,10], cacPct:[15,8,4], churn:[4,2.5,1.5]},
+  creator:  {conv:[0.8,1.5,3.0], margin:[65,78,88], ltvcac:[2.5,4,6], cacPct:[35,20,10], churn:[9,6,3]}
+};
+const BENCH_META = {
+  conv:{label:'Conversion rate', dir:1, fmt:v=>fP(v,2)},
+  margin:{label:'Contribution margin', dir:1, fmt:v=>fP(v,0)},
+  ltvcac:{label:'LTV:CAC', dir:1, fmt:v=>fX(v)},
+  cacPct:{label:'CAC as % of price', dir:-1, fmt:v=>fP(v,0)},
+  churn:{label:'Monthly churn', dir:-1, fmt:v=>fP(v,1)}
+};
+const FIELDS = [
+  {g:'Unit economics'},
+  {k:'price', label:'Price per sale', pre:'$', max:500, step:0.01, hint:'Average order value or monthly plan price'},
+  {k:'delivery', label:'Delivery cost per sale', pre:'$', max:200, step:0.01, hint:'COGS, shipping, hosting, fulfilment'},
+  {k:'feePct', label:'Payment fee', suf:'%', max:15, step:0.1, hint:'Plus $0.30 per sale'},
+  {k:'refund', label:'Refund rate', suf:'%', max:40, step:0.1},
+  {g:'Acquisition'},
+  {k:'visitors', label:'Monthly visitors', max:100000, step:1},
+  {k:'conv', label:'Conversion rate', suf:'%', max:10, step:0.01},
+  {k:'ad', label:'Monthly ad spend', pre:'$', max:50000, step:1},
+  {k:'fixed', label:'Monthly fixed costs', pre:'$', max:50000, step:1},
+  {g:'Retention'},
+  {k:'orders', label:'Orders per customer', suf:'×', min:1, max:10, step:0.1, hint:'Lifetime orders · one-time model', only:'onetime'},
+  {k:'churn', label:'Monthly churn', suf:'%', min:0, max:25, step:0.1, hint:'Share of subscribers lost each month · subscription model', only:'subscription'},
+  {g:'Cash'},
+  {k:'cash', label:'Cash on hand', pre:'$', max:200000, step:100},
+  {k:'invBuy', label:'Upcoming inventory buy', pre:'$', max:100000, step:100},
+  {k:'invMonth', label:'Inventory buy in month', suf:'mo', min:1, max:12, step:1}
+];
+const NUM_KEYS = ['price','delivery','feePct','refund','visitors','conv','ad','fixed','orders','churn','cash','invBuy','invMonth','elast','target'];
+const LABELS = {price:'Price per sale', delivery:'Delivery cost', feePct:'Payment fee %', refund:'Refund rate %', visitors:'Monthly visitors', conv:'Conversion rate %', ad:'Ad spend', fixed:'Fixed costs', orders:'Orders per customer', churn:'Monthly churn %', cash:'Cash on hand', invBuy:'Inventory buy', invMonth:'Inventory month'};
+const BIZ_KEYS = Object.keys(BIZ_NAMES);
+const bizWord = k => k === 'saas' ? 'SaaS' : BIZ_NAMES[k].toLowerCase();
+
+/* ---------- state ---------- */
+let state = Object.assign({}, PRESETS.ecommerce.s);
+let whatIf = {price:0, conv:0, ad:0, delivery:0, refund:0, retention:0, fixed:0};
+let scenarios = store.get('pps.scenarios', []);
+let history = store.get('pps.history', []);
+let activePreset = 'ecommerce';
+
+function sanitize(s){
+  const o = Object.assign({}, PRESETS.ecommerce.s);
+  if (s && typeof s === 'object'){
+    if (s.model === 'onetime' || s.model === 'subscription') o.model = s.model;
+    if (BIZ_KEYS.includes(s.biz)) o.biz = s.biz;
+    NUM_KEYS.forEach(k => { const v = Number(s[k]); if (s[k] !== undefined && s[k] !== null && s[k] !== '' && isFinite(v)) o[k] = v; });
+  }
+  o.invMonth = clamp(Math.round(o.invMonth)||1, 1, 12);
+  o.orders = Math.max(1, o.orders);
+  return o;
+}
+
+/* ---------- core math ---------- */
+function compute(s){
+  const price = Math.max(0, +s.price || 0);
+  const r = clamp((+s.refund||0)/100, 0, 1), f = Math.max(0, (+s.feePct||0)/100);
+  const fee = price * f + 0.30;
+  const refundLoss = price * r;
+  const net = price * (1 - r);
+  const delivery = Math.max(0, +s.delivery || 0);
+  const contribution = net - delivery - fee;
+  const visitors = Math.max(0, +s.visitors || 0), conv = clamp(+s.conv||0, 0, 100);
+  const newCust = visitors * conv / 100;
+  const ad = Math.max(0, +s.ad||0), fixed = Math.max(0, +s.fixed||0);
+  const cac = newCust > 0 ? ad / newCust : (ad > 0 ? Infinity : 0);
+  const pps = contribution - cac;
+  const revenue = newCust * price;
+  const monthly = newCust * contribution - ad - fixed;
+  const churn = clamp((+s.churn||0)/100, 0, 1);
+  const sub = s.model === 'subscription';
+  const lifeMonths = sub ? (churn > 0 ? Math.min(1/churn, 60) : 60) : null;
+  const orders = Math.max(1, +s.orders || 1);
+  const ltv = sub ? contribution * lifeMonths : contribution * orders;
+  const ltvcac = cac === 0 ? (ltv > 0 ? Infinity : 0) : (isFinite(cac) ? ltv / cac : 0);
+  const margin = price > 0 ? contribution / price * 100 : 0;
+  const netMargin = revenue > 0 ? monthly / revenue * 100 : 0;
+  const cacPct = price > 0 && isFinite(cac) ? cac / price * 100 : Infinity;
+  const denom = 1 - r - f;
+  const beSales = contribution > 0 ? (ad + fixed) / contribution : Infinity;
+  const beConv = visitors > 0 && isFinite(beSales) ? beSales / visitors * 100 : Infinity;
+  const bePrice = newCust > 0 && denom > 0 ? ((ad + fixed)/newCust + delivery + 0.30) / denom : Infinity;
+  const bePriceSale = denom > 0 && isFinite(cac) ? (delivery + 0.30 + cac) / denom : Infinity;
+  const maxCac = contribution;
+  const cohortValue = newCust * ltv - ad - fixed;
+  const payback = contribution > 0 ? cac / contribution : Infinity; // orders or months
+  return {price, r, f, fee, refundLoss, net, delivery, contribution, visitors, conv, newCust, ad, fixed, cac, pps, revenue, monthly, churn, sub, lifeMonths, orders, ltv, ltvcac, margin, netMargin, cacPct, beSales, beConv, bePrice, bePriceSale, maxCac, cohortValue, payback};
+}
+function healthScore(m){
+  if (m.price <= 0) return 0;
+  const c = x => clamp(x, 0, 1);
+  const ratio = isFinite(m.ltvcac) ? m.ltvcac : 10;
+  const marginS = c(m.margin/60) * 25;
+  const ltvS = c((ratio - 0.5)/3.5) * 25;
+  const profS = m.revenue > 0 ? c(0.5 + m.netMargin/100 * 2) * 25 : 0;
+  const ppsS = c(0.5 + (m.pps/m.price) * 2) * 15;
+  const refS = c(1 - m.r/0.2) * 10;
+  return Math.round(marginS + ltvS + profS + ppsS + refS);
+}
+function verdict(m, score){
+  if (m.contribution <= 0) return ['Underwater on every sale', 'Refunds, delivery and fees cost more than the price. No amount of traffic fixes this — the price or the cost per sale has to change.'];
+  if (m.pps < 0 && m.ltv > m.cac) return ['Living on repeat revenue', 'The first sale doesn\'t cover what it cost to acquire the customer, but lifetime value does. Cash flow will lag profit — watch runway.'];
+  if (m.pps < 0) return ['Ads outrun earnings', 'Each customer costs more to acquire than they will ever contribute. Cut spend or lift conversion before scaling.'];
+  if (m.monthly < 0) return ['Profitable per sale, short on volume', 'Each sale makes money, but not enough of them to cover ads and fixed costs yet. Volume or price is the gap.'];
+  if (score >= 80) return ['Strong unit economics', 'Every sale pays for itself and the month ends in profit. Protect margin and scale what works.'];
+  if (score >= 60) return ['Healthy, with headroom', 'The model works. The levers below show where the next dollar of profit is cheapest to find.'];
+  if (score >= 40) return ['Working, but fragile', 'Profitable today, with thin buffers. A small rise in CAC or refunds could flip the month.'];
+  return ['Barely above water', 'Technically profitable, but margins are too thin to absorb surprises.'];
+}
+function tierOf(metric, val, biz){
+  const b = BENCH[biz][metric], dir = BENCH_META[metric].dir;
+  if (!isFinite(val)) return dir > 0 && val > 0 ? {k:'t10', t:'Top 10%'} : {k:'below', t:'Below avg'};
+  const [a, t25, t10] = b;
+  const ge = (x,y) => dir > 0 ? x >= y : x <= y;
+  if (ge(val, t10)) return {k:'t10', t:'Top 10%'};
+  if (ge(val, t25)) return {k:'t25', t:'Top 25%'};
+  if (ge(val, a)) return {k:'avg', t:'Average'};
+  return {k:'below', t:'Below avg'};
+}
+function benchVals(s, m){ return {conv:s.conv, margin:m.margin, ltvcac:m.ltvcac, cacPct:m.cacPct, churn:s.churn}; }
+
+function runwayOf(s, m){
+  let c = +s.cash || 0;
+  if (c < 0) return 0;
+  for (let i = 1; i <= 120; i++){
+    const flow = m.monthly - (i === s.invMonth ? (+s.invBuy||0) : 0);
+    const prev = c; c += flow;
+    if (c < 0) return (i - 1) + (flow < 0 ? prev / -flow : 1);
+  }
+  return Infinity;
+}
+function cashSeries(s, m, n=12){ let c = +s.cash||0; const a = []; for (let i = 1; i <= n; i++){ c += m.monthly - (i === s.invMonth ? (+s.invBuy||0) : 0); a.push(c); } return a; }
+function addMonths(months){ const d = new Date(); d.setDate(d.getDate() + Math.round(months * 30.44)); return d; }
+const fmtDate = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+/* ---------- inputs panel ---------- */
+const fieldEls = {};
+function buildInputs(){
+  const host = $('#fields'); let html = '';
+  FIELDS.forEach(f => {
+    if (f.g){ html += `<div class="group-title">${f.g}</div>`; return; }
+    html += `<div class="field" data-k="${f.k}">
+      <div class="field-top"><label for="in-${f.k}">${f.label}</label>
+        <div class="num-wrap">${f.pre?`<span class="u">${f.pre}</span>`:''}<input id="in-${f.k}" type="number" inputmode="decimal" step="${f.step}" min="${f.min||0}">${f.suf?`<span class="u">${f.suf}</span>`:''}</div></div>
+      <input type="range" id="rg-${f.k}" min="${f.min||0}" max="${f.max}" step="${f.step}" aria-label="${f.label}">
+      ${f.hint?`<div class="hint">${f.hint}</div>`:''}</div>`;
+  });
+  host.innerHTML = html;
+  FIELDS.forEach(f => {
+    if (!f.k) return;
+    const num = $('#in-'+f.k), rg = $('#rg-'+f.k);
+    fieldEls[f.k] = {num, rg, f, wrap: num.closest('.field')};
+    num.addEventListener('input', () => { const v = parseFloat(num.value); if (isFinite(v)) { state[f.k] = v; adaptRange(f.k); rg.value = v; } else state[f.k] = 0; activePreset = null; schedule(); });
+    num.addEventListener('blur', () => { if (num.value === '' ) { num.value = 0; } if (f.k === 'invMonth'){ state.invMonth = clamp(Math.round(state.invMonth),1,12); num.value = state.invMonth; schedule(); } });
+    rg.addEventListener('input', () => { state[f.k] = parseFloat(rg.value); num.value = rg.value; activePreset = null; schedule(); });
+  });
+  $$('.seg button').forEach(b => b.addEventListener('click', () => { state.model = b.dataset.model; activePreset = null; syncInputs(); schedule(); }));
+  const opts = BIZ_KEYS.map(k => `<option value="${k}">${BIZ_NAMES[k]}</option>`).join('');
+  $('#bizSel').innerHTML = opts; $('#benchSel').innerHTML = opts;
+  $('#bizSel').addEventListener('change', e => { state.biz = e.target.value; syncInputs(); schedule(); });
+  $('#benchSel').addEventListener('change', e => { state.biz = e.target.value; syncInputs(); schedule(); });
+  const er = $('#elastRange'), ei = $('#elastIn');
+  er.addEventListener('input', () => { state.elast = parseFloat(er.value); ei.value = er.value; schedule(); });
+  ei.addEventListener('input', () => { const v = parseFloat(ei.value); if (isFinite(v)) { state.elast = clamp(v,0,5); er.value = state.elast; schedule(); } });
+  $('#targetIn').addEventListener('input', e => { const v = parseFloat(e.target.value); state.target = isFinite(v) ? v : 0; schedule(); });
+}
+function adaptRange(k){
+  const e = fieldEls[k]; if (!e) return;
+  const v = +state[k] || 0; const base = e.f.max;
+  const mx = v > base * 0.9 ? niceCeil(v * 1.6) : base;
+  if (+e.rg.max !== mx) e.rg.max = mx;
+}
+function syncInputs(){
+  Object.keys(fieldEls).forEach(k => {
+    const e = fieldEls[k]; adaptRange(k);
+    if (document.activeElement !== e.num) e.num.value = +(+state[k]).toFixed(4);
+    e.rg.value = state[k];
+    e.wrap.classList.toggle('inactive', !!e.f.only && e.f.only !== state.model);
+  });
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.model === state.model));
+  $('#bizSel').value = state.biz; $('#benchSel').value = state.biz;
+  if (document.activeElement !== $('#elastIn')) $('#elastIn').value = state.elast;
+  $('#elastRange').value = state.elast;
+  if (document.activeElement !== $('#targetIn')) $('#targetIn').value = state.target;
+  $$('.preset').forEach(p => p.classList.toggle('active', p.dataset.k === activePreset));
+}
+function setState(obj, presetKey){
+  state = sanitize(Object.assign({}, state, obj));
+  activePreset = presetKey || null;
+  syncInputs(); render();
+}
+
+
+/* ---------- grayscale drawings (used when photos are unavailable) ---------- */
+function svgWrap(label, body){ return `<svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${label}"><rect class="bg" width="400" height="300"/>${body}</svg>`; }
+function shirt(cx, y, cls){ return `<path class="${cls}" d="M${cx-18} ${y+5} L${cx-7} ${y} Q${cx} ${y+8} ${cx+7} ${y} L${cx+18} ${y+5} L${cx+25} ${y+24} L${cx+16} ${y+27} L${cx+16} ${y+82} L${cx-16} ${y+82} L${cx-16} ${y+27} L${cx-25} ${y+24} Z"/><path class="s" style="stroke-width:2" d="M${cx} ${y-2} L${cx} ${y-12} Q${cx+8} ${y-14} ${cx+6} ${y-20}"/>`; }
+const ART = {
+  hero: () => svgWrap('Drawing of a desk with a laptop showing a rising chart, a notebook of bar charts and a coffee cup',
+    `<rect class="x" y="214" width="400" height="86"/>
+     <g transform="rotate(-8 95 190)"><rect class="w" x="35" y="150" width="120" height="88" rx="4"/><rect x="35" y="150" width="120" height="88" rx="4" fill="none" class="sk"/>
+       <rect class="k" x="52" y="208" width="14" height="18"/><rect class="d" x="74" y="196" width="14" height="30"/><rect class="m" x="96" y="186" width="14" height="40"/><rect class="k" x="118" y="170" width="14" height="56"/>
+       <line class="s2" x1="50" y1="164" x2="110" y2="164"/></g>
+     <rect class="k" x="150" y="64" width="196" height="132" rx="9"/><rect class="w" x="160" y="74" width="176" height="110" rx="3"/>
+     <path class="l" d="M172 172 L196 156 L220 160 L246 136 L270 142 L296 116 L324 102 L324 176 L172 176 Z"/>
+     <polyline class="s" points="172,172 196,156 220,160 246,136 270,142 296,116 324,102"/>
+     <circle class="k" cx="324" cy="102" r="5"/>
+     <line class="s2" x1="172" y1="88" x2="214" y2="88"/><line class="s2" x1="172" y1="98" x2="196" y2="98"/>
+     <path class="d" d="M128 196 L368 196 L378 210 Q379 214 374 214 L122 214 Q117 214 118 210 Z"/>
+     <rect class="l" x="44" y="236" width="0" height="0"/>
+     <path class="w" d="M352 168 L384 168 L380 210 L356 210 Z"/><path class="s" d="M352 168 L384 168 L380 210 L356 210 Z"/><path class="s" d="M383 178 Q396 180 393 192 Q391 200 381 200"/>
+     <path class="s2" d="M362 160 Q358 150 364 142 M374 160 Q370 150 376 142"/>
+     <line x1="176" y1="244" x2="250" y2="232" style="stroke:var(--g1);stroke-width:5;stroke-linecap:round"/><line x1="244" y1="233" x2="252" y2="231.5" style="stroke:var(--g3);stroke-width:5;stroke-linecap:round"/>`),
+  ecommerce: () => svgWrap('Drawing of a clothing rack with shirts next to a shopping bag',
+    `<rect class="x" y="246" width="400" height="54"/>
+     <path class="s" d="M70 246 L70 62 L270 62 L270 246"/><line class="s" x1="58" y1="246" x2="84" y2="246"/><line class="s" x1="256" y1="246" x2="284" y2="246"/>
+     ${shirt(104, 84, 'd')}${shirt(152, 84, 'l')}${shirt(200, 84, 'k')}${shirt(240, 84, 'm')}
+     <path class="s" d="M300 168 Q300 132 326 132 Q352 132 352 168"/>
+     <rect class="k" x="284" y="162" width="84" height="84" rx="4"/>
+     <rect class="w" x="304" y="190" width="44" height="26" rx="3"/><line class="s2" x1="312" y1="203" x2="340" y2="203"/>`),
+  saas: () => svgWrap('Drawing of a web dashboard with charts and a phone app',
+    `<rect class="w" x="40" y="42" width="290" height="200" rx="10"/><rect x="40" y="42" width="290" height="200" rx="10" fill="none" class="sk"/>
+     <path class="x" d="M50 42 L320 42 Q330 42 330 52 L330 66 L40 66 L40 52 Q40 42 50 42 Z"/>
+     <circle class="m" cx="56" cy="54" r="4"/><circle class="l" cx="70" cy="54" r="4"/><circle class="l" cx="84" cy="54" r="4"/>
+     <rect class="x" x="41.5" y="66" width="56" height="174"/>
+     <line class="s2" x1="54" y1="86" x2="84" y2="86"/><line class="s2" x1="54" y1="104" x2="78" y2="104"/><line class="s2" x1="54" y1="122" x2="82" y2="122"/><line class="s2" x1="54" y1="140" x2="72" y2="140"/>
+     <rect class="k" x="112" y="80" width="60" height="38" rx="5"/><rect class="d" x="180" y="80" width="60" height="38" rx="5"/><rect class="m" x="248" y="80" width="66" height="38" rx="5"/>
+     <line class="sw" x1="122" y1="92" x2="146" y2="92"/><line class="sw" x1="122" y1="104" x2="158" y2="104"/><line class="sw" x1="190" y1="92" x2="214" y2="92"/><line class="sw" x1="190" y1="104" x2="226" y2="104"/>
+     <path class="l" d="M112 222 L140 196 L168 204 L196 172 L224 182 L252 150 L300 140 L300 226 L112 226 Z"/>
+     <polyline class="s" points="112,222 140,196 168,204 196,172 224,182 252,150 300,140"/>
+     <rect class="k" x="286" y="128" width="78" height="134" rx="12"/><rect class="w" x="294" y="142" width="62" height="104" rx="3"/>
+     <rect class="d" x="302" y="208" width="8" height="30"/><rect class="m" x="316" y="192" width="8" height="46"/><rect class="k" x="330" y="176" width="8" height="62"/><rect class="l" x="344" y="196" width="6" height="42"/>
+     <circle class="k" cx="325" cy="160" r="9"/><circle class="w" cx="325" cy="160" r="4"/>`),
+  course: () => svgWrap('Drawing of an open book under a video lesson with a play button',
+    `<rect class="k" x="104" y="34" width="192" height="118" rx="10"/>
+     <circle class="w" cx="200" cy="88" r="24"/><path class="k" d="M192 76 L214 88 L192 100 Z"/>
+     <line style="stroke:var(--g2);stroke-width:4" x1="122" y1="136" x2="278" y2="136"/><line style="stroke:var(--card);stroke-width:4" x1="122" y1="136" x2="190" y2="136"/><circle class="w" cx="190" cy="136" r="5"/>
+     <path class="x" d="M60 270 Q130 252 200 266 Q270 252 340 270 L340 278 L60 278 Z"/>
+     <path class="w" d="M200 262 Q140 236 70 246 L70 178 Q140 168 200 194 Z"/><path class="s" d="M200 262 Q140 236 70 246 L70 178 Q140 168 200 194 Z"/>
+     <path class="w" d="M200 262 Q260 236 330 246 L330 178 Q260 168 200 194 Z"/><path class="s" d="M200 262 Q260 236 330 246 L330 178 Q260 168 200 194 Z"/>
+     <path class="s2" d="M88 196 Q140 188 184 206 M88 212 Q140 204 184 222 M88 228 Q130 220 160 230"/>
+     <path class="s2" d="M216 206 Q260 188 312 196 M216 222 Q260 204 312 212 M240 228 Q270 220 312 228"/>
+     <line class="s" x1="200" y1="194" x2="200" y2="262"/>`),
+  agency: () => svgWrap('Drawing of a team in front of a whiteboard covered in sticky notes',
+    `<rect class="w" x="44" y="30" width="312" height="168" rx="6"/><rect x="44" y="30" width="312" height="168" rx="6" fill="none" class="sk"/>
+     <rect class="l" x="68" y="54" width="44" height="44" rx="2"/><rect class="m" x="124" y="54" width="44" height="44" rx="2"/><rect class="x" x="68" y="110" width="44" height="44" rx="2"/>
+     <rect class="d" x="232" y="54" width="44" height="44" rx="2"/><rect class="l" x="288" y="54" width="44" height="44" rx="2"/><rect class="m" x="288" y="110" width="44" height="44" rx="2"/>
+     <path class="s" d="M176 76 Q200 60 222 76"/><path class="s" d="M214 70 L222 76 L213 81"/>
+     <line class="s2" x1="132" y1="122" x2="230" y2="122"/><line class="s2" x1="132" y1="136" x2="206" y2="136"/><polyline class="s" points="236,146 252,130 266,140 280,116"/>
+     <rect class="x" y="252" width="400" height="48"/>
+     <circle class="d" cx="110" cy="218" r="20"/><path class="d" d="M74 300 Q74 244 110 244 Q146 244 146 300 Z"/>
+     <circle class="k" cx="200" cy="208" r="23"/><path class="k" d="M158 300 Q158 238 200 238 Q242 238 242 300 Z"/>
+     <circle class="m" cx="290" cy="220" r="19"/><path class="m" d="M256 300 Q256 246 290 246 Q324 246 324 300 Z"/>`),
+  creator: () => svgWrap('Drawing of a studio microphone with sound waves',
+    `<circle class="x" cx="200" cy="130" r="112"/>
+     <path class="s2" d="M128 70 Q108 104 128 138 M104 56 Q76 104 104 152"/>
+     <path class="s2" d="M272 70 Q292 104 272 138 M296 56 Q324 104 296 152"/>
+     <rect class="k" x="170" y="36" width="60" height="112" rx="30"/>
+     <line class="sw" x1="178" y1="66" x2="222" y2="66"/><line class="sw" x1="174" y1="80" x2="226" y2="80"/><line class="sw" x1="174" y1="94" x2="226" y2="94"/><line class="sw" x1="174" y1="108" x2="226" y2="108"/><line class="sw" x1="178" y1="122" x2="222" y2="122"/>
+     <path class="s" style="stroke-width:5" d="M156 112 Q156 172 200 172 Q244 172 244 112"/>
+     <line class="s" style="stroke-width:6" x1="200" y1="172" x2="200" y2="258"/>
+     <ellipse class="d" cx="200" cy="264" rx="62" ry="12"/>`)
+};
+function mountMedia(host, key, src, alt){
+  const draw = () => { host.innerHTML = ART[key](); };
+  if (window.PPS_NO_PHOTOS || !src){ draw(); return; }
+  const img = new Image(); img.className = 'photo'; img.alt = alt; img.loading = 'lazy';
+  img.addEventListener('error', draw, {once:true}); img.src = src; host.appendChild(img);
+}
+
+/* ---------- presets ---------- */
+function buildPresets(){
+  const html = Object.entries(PRESETS).map(([k,p]) => `
+    <button class="preset" data-k="${k}" aria-label="Load ${p.name} preset">
+      <div class="ph" data-art="${k}"></div>
+      <div class="body"><div class="name">${p.name}</div><div class="meta">${p.meta}</div></div>
+    </button>`).join('');
+  $$('.presets').forEach(g => { g.innerHTML = html; });
+  $$('.preset .ph').forEach(ph => mountMedia(ph, ph.dataset.art, PHOTO(PRESETS[ph.dataset.art].photo), PRESETS[ph.dataset.art].alt));
+  $$('.preset').forEach(b => b.addEventListener('click', () => {
+    const p = PRESETS[b.dataset.k], fromLanding = !!b.closest('#landing');
+    whatIf = {price:0, conv:0, ad:0, delivery:0, refund:0, retention:0, fixed:0}; syncWhatIf();
+    setState(Object.assign({}, p.s), b.dataset.k);
+    toast(p.name + ' preset loaded');
+    if (fromLanding){ pendingScroll = 'overview'; location.hash = 'app'; }
+    else if (window.innerWidth < 900) document.getElementById('overview').scrollIntoView({behavior:'smooth'});
+  }));
+}
+
+/* ---------- gauge ---------- */
+function gaugeSVG(score){
+  const ang = Math.PI * (1 - score/100);
+  const nx = 100 + 62 * Math.cos(ang), ny = 100 - 62 * Math.sin(ang);
+  let ticks = '';
+  for (let i = 0; i <= 10; i++){
+    const a = Math.PI * (1 - i/10), r1 = i % 5 === 0 ? 90 : 93, r2 = 97;
+    ticks += `<line x1="${100+r1*Math.cos(a)}" y1="${100-r1*Math.sin(a)}" x2="${100+r2*Math.cos(a)}" y2="${100-r2*Math.sin(a)}" style="stroke:var(--g3);stroke-width:1"/>`;
+  }
+  return `<svg viewBox="0 0 200 122" role="img" aria-label="Health score ${score} out of 100">
+    <path d="M20 100 A80 80 0 0 1 180 100" pathLength="100" style="fill:none;stroke:var(--line);stroke-width:12;stroke-linecap:round"/>
+    <path d="M20 100 A80 80 0 0 1 180 100" pathLength="100" style="fill:none;stroke:var(--fg);stroke-width:12;stroke-linecap:round;stroke-dasharray:${Math.max(0.01,score)} 200;transition:stroke-dasharray .3s"/>
+    ${ticks}
+    <line x1="100" y1="100" x2="${nx.toFixed(2)}" y2="${ny.toFixed(2)}" style="stroke:var(--fg);stroke-width:2.5;stroke-linecap:round"/>
+    <circle cx="100" cy="100" r="5" style="fill:var(--fg)"/>
+    <text x="100" y="78" text-anchor="middle" style="font-family:var(--mono);font-size:30px;font-weight:500;fill:var(--fg)">${score}</text>
+    <text x="100" y="119" text-anchor="middle" style="font-family:var(--sans);font-size:10px;letter-spacing:.12em;fill:var(--muted)">HEALTH SCORE</text>
+    <text x="20" y="116" text-anchor="middle" class="ax">0</text><text x="180" y="116" text-anchor="middle" class="ax">100</text>
+  </svg>`;
+}
+
+/* ---------- generic line chart with hover ---------- */
+function lineChart(host, cfg){
+  const W = 640, H = cfg.h || 260, P = {l:58, r:16, t:16, b:32};
+  const xs = cfg.xs;
+  let ys = []; cfg.series.forEach(s => s.ys.forEach(v => { if (isFinite(v)) ys.push(v); }));
+  let ymin = Math.min.apply(null, ys.concat(cfg.yMin != null ? [cfg.yMin] : []));
+  let ymax = Math.max.apply(null, ys.concat(cfg.yMax != null ? [cfg.yMax] : []));
+  if (cfg.zero){ ymin = Math.min(ymin, 0); ymax = Math.max(ymax, 0); }
+  const yt = niceTicks(ymin, ymax, 5); ymin = yt[0]; ymax = yt[yt.length-1];
+  const xmin = xs[0], xmax = xs[xs.length-1];
+  const X = v => P.l + (v - xmin) / ((xmax - xmin) || 1) * (W - P.l - P.r);
+  const Y = v => P.t + (1 - (clamp(v, ymin, ymax) - ymin) / ((ymax - ymin) || 1)) * (H - P.t - P.b);
+  let g = '';
+  yt.forEach(v => { g += `<line class="gridl" x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="ax" x="${P.l-8}" y="${Y(v)+3.5}" text-anchor="end">${cfg.yFmt(v)}</text>`; });
+  (cfg.xTicks || []).forEach(v => { g += `<text class="ax" x="${X(v)}" y="${H-P.b+18}" text-anchor="middle">${cfg.xFmt(v)}</text>`; });
+  if (cfg.zero && ymin < 0 && ymax > 0) g += `<line class="zero" x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+  cfg.series.forEach(s => {
+    let d = ''; s.ys.forEach((v,i) => { if (!isFinite(v)) return; d += (d ? 'L' : 'M') + X(xs[i]).toFixed(1) + ' ' + Y(v).toFixed(1); });
+    if (s.area){ const base = Y(Math.max(ymin, 0)); g += `<path class="area" d="${d}L${X(xs[xs.length-1])} ${base}L${X(xs[0])} ${base}Z"/>`; }
+    g += `<path class="${s.cls}" d="${d}"/>`;
+  });
+  (cfg.markers || []).forEach(mk => {
+    const x = X(mk.x); if (x < P.l || x > W - P.r) return;
+    g += `<line class="mk" x1="${x}" x2="${x}" y1="${P.t}" y2="${H-P.b}"/>`;
+    if (mk.y != null) g += `<circle class="dot" cx="${x}" cy="${Y(mk.y)}" r="4"/>`;
+    const anchor = x > W - 90 ? 'end' : x < P.l + 60 ? 'start' : 'middle';
+    g += `<text class="mk-lbl" x="${x + (anchor==='end'?-4:anchor==='start'?4:0)}" y="${P.t + 10 + (mk.row||0)*13}" text-anchor="${anchor}">${esc(mk.label)}</text>`;
+  });
+  g += `<g class="hov" style="display:none"><line class="cross" y1="${P.t}" y2="${H-P.b}"/>${cfg.series.map(()=>'<circle class="dot" r="4"/>').join('')}</g>`;
+  g += `<rect x="${P.l}" y="${P.t}" width="${W-P.l-P.r}" height="${H-P.t-P.b}" fill="transparent" class="hit"/>`;
+  host.innerHTML = `<div class="chart-wrap"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(cfg.aria||'chart')}">${g}</svg><div class="tip"></div></div>`;
+  const svg = host.querySelector('svg'), hov = svg.querySelector('.hov'), tip = host.querySelector('.tip'), wrap = host.querySelector('.chart-wrap');
+  const line = hov.querySelector('line'), dots = hov.querySelectorAll('circle');
+  function move(ev){
+    const rect = svg.getBoundingClientRect(); const pt = ev.touches ? ev.touches[0] : ev;
+    const vx = (pt.clientX - rect.left) / rect.width * W;
+    let best = 0, bd = Infinity; xs.forEach((x,i) => { const d = Math.abs(X(x) - vx); if (d < bd){ bd = d; best = i; } });
+    const x = X(xs[best]);
+    hov.style.display = ''; line.setAttribute('x1', x); line.setAttribute('x2', x);
+    cfg.series.forEach((s,i) => { const v = s.ys[best]; dots[i].setAttribute('cx', x); dots[i].setAttribute('cy', isFinite(v) ? Y(v) : -99); });
+    tip.innerHTML = cfg.tip(best); tip.classList.add('on');
+    const px = x / W * rect.width, tw = tip.offsetWidth, ww = wrap.clientWidth;
+    let left = px + 12; if (left + tw > ww) left = px - tw - 12; left = clamp(left, 0, Math.max(0, ww - tw));
+    tip.style.left = left + 'px'; tip.style.top = '8px';
+  }
+  function leave(){ hov.style.display = 'none'; tip.classList.remove('on'); }
+  svg.addEventListener('mousemove', move); svg.addEventListener('mouseleave', leave);
+  svg.addEventListener('touchstart', move, {passive:true}); svg.addEventListener('touchmove', move, {passive:true}); svg.addEventListener('touchend', () => setTimeout(leave, 1600));
+}
+
+/* ---------- renderers ---------- */
+const KPI_HELP = {'Profit per sale':'Contribution per sale minus the cost to acquire the customer','Monthly profit':'New customers × contribution − ad spend − fixed costs','LTV:CAC':'Lifetime value of a customer divided by what it cost to acquire them','Contribution margin':'Share of the price left after refunds, delivery and fees','CAC':'Ad spend ÷ new customers','Conversion':'Share of visitors who buy'};
+function kpiCard(lbl, val, foot, badge){ return `<div class="kpi" title="${KPI_HELP[lbl]||''}"><div class="lbl"><span>${lbl}</span>${badge ? `<span class="badge ${badge.k}" title="Benchmark tier">${badge.t}</span>` : ''}</div><div class="val">${val}</div><div class="foot">${foot}</div></div>`; }
+
+function renderOverview(s, m, score){
+  $('#gauge').innerHTML = gaugeSVG(score);
+  const [vt, vb] = verdict(m, score);
+  $('#verdictTitle').textContent = vt; $('#verdictBody').textContent = vb;
+  const B = s.biz;
+  $('#kpis').innerHTML = [
+    kpiCard('Profit per sale', f$(m.pps), `${f$(m.contribution)} contribution − ${f$(m.cac)} CAC`),
+    kpiCard('Monthly profit', f$(m.monthly, Math.abs(m.monthly) >= 1000 ? 0 : 2), `${fN(m.newCust)} new customers · ${fP(m.netMargin,0)} net`),
+    kpiCard('LTV:CAC', fX(m.ltvcac), `${f$(m.ltv)} LTV vs ${f$(m.cac)} CAC`, tierOf('ltvcac', m.ltvcac, B)),
+    kpiCard('Contribution margin', fP(m.margin), `${f$(m.contribution)} kept of ${f$(m.price)}`, tierOf('margin', m.margin, B)),
+    kpiCard('CAC', f$(m.cac), `${fP(m.cacPct,0)} of price`, tierOf('cacPct', m.cacPct, B)),
+    kpiCard('Conversion', fP(s.conv, 2), `${fN(m.visitors)} visitors`, tierOf('conv', s.conv, B))
+  ].join('');
+}
+
+function renderBreakdown(s, m){
+  const cac = isFinite(m.cac) ? m.cac : m.price * 2;
+  const segs = [
+    {n:'Refunds', v:m.refundLoss, c:'sw-g4'},
+    {n:'Delivery', v:m.delivery, c:'sw-g2'},
+    {n:'Payment fees', v:m.fee, c:'sw-g3'},
+    {n:'Acquisition (CAC)', v:cac, c:'sw-hatch'}
+  ];
+  const costs = segs.reduce((a,b)=>a+b.v, 0);
+  const profit = m.price - costs;
+  if (profit > 0) segs.push({n:'Profit', v:profit, c:'sw-fg'});
+  const base = Math.max(m.price, costs) || 1;
+  let bar = segs.map(sg => `<div class="${sg.c}" style="width:${(sg.v/base*100).toFixed(3)}%" title="${sg.n}: ${f$(sg.v)}"></div>`).join('');
+  if (profit < 0 && m.price > 0) bar += `<div class="price-mark" style="left:${(m.price/base*100).toFixed(2)}%" title="Price"></div>`;
+  $('#stackbar').innerHTML = bar;
+  const rows = segs.map(sg => `<div class="li"><span class="sw ${sg.c}"></span><span>${sg.n}</span><span class="num">${f$(sg.v)}</span><span class="pc">${m.price>0?fP(sg.v/m.price*100,0):'—'}</span></div>`);
+  if (profit <= 0) rows.push(`<div class="li"><span class="sw" style="border:1.5px solid var(--fg)"></span><strong>Loss per sale</strong><span class="num"><strong>${f$(profit)}</strong></span><span class="pc">${m.price>0?fP(profit/m.price*100,0):'—'}</span></div>`);
+  $('#legend').innerHTML = rows.join('');
+  $('#bdSub').textContent = profit >= 0 ? `Of a ${f$(m.price)} sale, you keep ${f$(profit)} after acquisition.` : `Costs exceed the ${f$(m.price)} price by ${f$(-profit)} — the bar runs past the price line.`;
+}
+
+function renderBreakevens(s, m){
+  const item = (lbl, val, cmp, ok) => `<div class="be-item"><div class="lbl">${lbl}</div><div class="val">${val}</div><div class="cmp">${ok ? '<span class="ok">✓ cleared</span> · ' : '<span class="ok">✗</span> '}${cmp}</div></div>`;
+  $('#breakevens').innerHTML = [
+    item('Price to break even (month)', f$(m.bePrice), `you charge ${f$(m.price)}`, m.price >= m.bePrice),
+    item('Sales needed per month', fN(Math.ceil(m.beSales)), `you make ${fN(m.newCust)}`, m.newCust >= m.beSales),
+    item('Conversion needed', fP(m.beConv, 2), `you convert ${fP(s.conv,2)}`, s.conv >= m.beConv),
+    item('Max CAC (first sale)', f$(m.maxCac), `yours is ${f$(m.cac)} · lifetime max ${f$(m.ltv)}`, m.cac <= m.maxCac)
+  ].join('');
+}
+
+function buildInsights(s, m, rw){
+  const L = []; const add = (sev, t, b) => L.push({sev, t, b});
+  const bz = BENCH[s.biz], name = BIZ_NAMES[s.biz];
+  const denom = 1 - m.r - m.f;
+  if (m.contribution <= 0){
+    add(3, 'Every sale loses money before ads', `After refunds, delivery and fees you keep ${f$(m.contribution)} of a ${f$(m.price)} sale. ${denom>0?`The price must be above ${f$((m.delivery+0.30)/denom)} just to cover costs.`:'Fees and refunds exceed 100% of price.'}`);
+  } else if (m.pps < 0){
+    if (m.ltv > m.cac) add(2, 'The first sale doesn\'t pay back acquisition', `A customer costs ${f$(m.cac)}; the first ${m.sub?'month':'order'} contributes ${f$(m.contribution)}. Payback takes ${fN(m.payback,1)} ${m.sub?'months':'orders'} — fund that gap with cash.`);
+    else add(3, 'Customers cost more than they\'re worth', `CAC is ${f$(m.cac)} against a lifetime value of ${f$(m.ltv)}. Scaling ad spend will scale losses.`);
+  }
+  if (m.monthly < 0 && m.contribution > 0){
+    add(3, 'The month ends in the red', `Covering ${f$(m.ad + m.fixed)} of ads and fixed costs takes ${fN(Math.ceil(m.beSales))} sales; you make ${fN(m.newCust)}. At current traffic that's ${fP(m.beConv,2)} conversion, or a price of ${f$(m.bePrice)}.`);
+  }
+  if (isFinite(m.ltvcac) && m.contribution > 0){
+    if (m.ltvcac < 1) add(3, 'LTV:CAC below 1×', `You recover only ${fP(m.ltvcac*100,0)} of what you spend to win a customer.`);
+    else if (m.ltvcac < 3) add(2, 'LTV:CAC under the 3× rule of thumb', `At ${fX(m.ltvcac)}, there is little room for rising ad costs. Getting to 3× needs CAC at ${f$(m.ltv/3)} or LTV at ${f$(m.cac*3)}.`);
+    else if (m.ltvcac > 6 && m.monthly > 0) add(1, 'You may be under-spending on growth', `LTV:CAC of ${fX(m.ltvcac)} leaves room to buy more customers. CAC could roughly double and stay above 3×.`);
+  }
+  if (s.refund >= 10) add(2, 'Refunds are high', `${fP(s.refund,1)} of revenue is refunded — about ${f$(m.refundLoss*m.newCust)} a month. Each point recovered adds ${f$(m.price*0.01*m.newCust)} a month.`);
+  if (m.price > 0 && m.fee / m.price > 0.06) add(1, 'Fees take a large bite', `Fees are ${fP(m.fee/m.price*100,1)} of each sale. ${m.price < 15 ? 'The fixed $0.30 hurts at low prices — bundles or annual plans help.' : 'Check your processor or platform rate.'}`);
+  if (s.conv < bz.conv[0]){
+    const alt = compute(Object.assign({}, s, {conv: bz.conv[0]}));
+    add(2, `Conversion is below a typical ${bizWord(s.biz)} business`, `${fP(s.conv,2)} vs about ${fP(bz.conv[0],1)} on average. Reaching average would add ${f$(alt.monthly - m.monthly)} a month.`);
+  } else if (s.conv >= bz.conv[2]) add(0, 'Conversion is top-10%', `${fP(s.conv,2)} converts better than most ${bizWord(s.biz)} businesses. Traffic is your growth lever.`);
+  if (m.sub && s.churn > bz.churn[0]){
+    const alt = compute(Object.assign({}, s, {churn: bz.churn[1]}));
+    add(2, 'Churn is above average', `At ${fP(s.churn,1)} a month, the average subscriber stays ${fN(m.lifeMonths,1)} months. Cutting churn to ${fP(bz.churn[1],1)} lifts LTV to ${f$(alt.ltv)}.`);
+  }
+  if (m.contribution > 0 && m.fixed > 0.5 * m.newCust * m.contribution && m.monthly >= 0) add(1, 'Fixed costs absorb most of the contribution', `${f$(m.fixed)} of fixed costs uses ${fP(m.fixed/(m.newCust*m.contribution)*100,0)} of monthly contribution.`);
+  if (rw < 6) add(3, `Cash runs out in ${fN(rw,1)} months`, `At the current swing, cash hits zero around ${fmtDate(addMonths(rw))}. Delay the inventory buy or cut spend.`);
+  else if (rw < 12) add(2, `Under a year of runway`, `Cash lasts about ${fN(rw,1)} months (to ${fmtDate(addMonths(rw))}).`);
+  if (m.margin >= bz.margin[2]) add(0, 'Margin is top-10%', `${fP(m.margin,0)} contribution margin leaves room to compete on price or outspend on ads.`);
+  if (m.sub) add(1, 'Monthly profit counts this month\'s new customers', 'Revenue from existing subscribers isn\'t in monthly profit. The cohort section shows what each month\'s customers earn over time.');
+  if (!L.some(x => x.sev >= 2)) add(0, 'Fundamentals look solid', 'No red flags. Use the lever table to decide where to push next.');
+  return L.sort((a,b) => b.sev - a.sev);
+}
+const SEV = ['Strength','Note','Warning','Critical'];
+function renderInsights(list){
+  $('#insights').innerHTML = list.map(x => `<div class="ins"><span class="sev s${x.sev}">${SEV[x.sev]}</span><div><div class="t">${esc(x.t)}</div><div class="b">${esc(x.b)}</div></div></div>`).join('');
+}
+
+function leverList(s){
+  return [
+    {n:'Raise price 10%', s:Object.assign({}, s, {price:s.price*1.1})},
+    {n:'Lift conversion 10%', s:Object.assign({}, s, {conv:s.conv*1.1})},
+    {n:'Cut ad spend 10% (same customers)', s:Object.assign({}, s, {ad:s.ad*0.9})},
+    {n:'Cut delivery cost 10%', s:Object.assign({}, s, {delivery:s.delivery*0.9})},
+    s.model === 'subscription' ? {n:'Cut churn 10%', s:Object.assign({}, s, {churn:s.churn*0.9})} : {n:'Lift repeat orders 10%', s:Object.assign({}, s, {orders:Math.max(1, s.orders*1.1)})}
+  ];
+}
+function rankLevers(s, m){
+  return leverList(s).map(l => { const lm = compute(l.s); return {n:l.n, dM:lm.monthly - m.monthly, dC:lm.cohortValue - m.cohortValue, ratio:lm.ltvcac}; }).sort((a,b) => b.dC - a.dC || b.dM - a.dM);
+}
+function renderLevers(s, m){
+  const L = rankLevers(s, m);
+  const mx = Math.max.apply(null, L.map(l => Math.abs(l.dC))) || 1;
+  $('#leverBody').innerHTML = L.map((l,i) => `<tr class="${i===0?'top1':''}"><td><span class="rank">${i+1}</span></td><td>${l.n}</td><td class="num mono">${signed(l.dM, v=>f$(v,0))}</td><td class="num mono ${l.dC>0?'pos':''}">${signed(l.dC, v=>f$(v,0))}</td><td class="num mono">${fX(l.ratio)}</td><td><div class="minibar"><div style="width:${(Math.max(0,l.dC)/mx*100).toFixed(1)}%"></div></div></td></tr>`).join('');
+  const pe = compute(Object.assign({}, s, {price:s.price*1.1, conv:s.conv*Math.pow(1.1, -s.elast)}));
+  $('#leverNote').textContent = `Cohort value = lifetime profit from one month of new customers, minus that month's ads and fixed costs. The price lever assumes conversion holds; at your elasticity of ${s.elast}, a 10% price rise changes monthly profit by ${signed(pe.monthly - m.monthly, v=>f$(v,0))} instead.`;
+}
+
+/* What-if lab */
+const WI = [
+  {k:'price', n:'Price', min:-50, max:100},
+  {k:'conv', n:'Conversion', min:-50, max:100},
+  {k:'ad', n:'Ad spend', min:-100, max:200},
+  {k:'delivery', n:'Delivery cost', min:-50, max:50},
+  {k:'refund', n:'Refund rate', min:-100, max:100},
+  {k:'retention', n:'Retention', min:-50, max:80, hint:'+ = lower churn / more repeat orders'},
+  {k:'fixed', n:'Fixed costs', min:-50, max:100}
+];
+function applyWhatIf(s, w){
+  const p = k => 1 + (w[k]||0)/100;
+  return sanitize(Object.assign({}, s, {
+    price:s.price*p('price'), conv:Math.min(100, s.conv*p('conv')), ad:s.ad*p('ad'), delivery:s.delivery*p('delivery'),
+    refund:Math.min(100, s.refund*p('refund')), fixed:s.fixed*p('fixed'),
+    churn:s.churn*Math.max(0, 1 - (w.retention||0)/100), orders:Math.max(1, s.orders*p('retention'))
+  }));
+}
+function buildWhatIf(){
+  $('#wiSliders').innerHTML = WI.map(w => `<div class="wi-slider"><div class="field-top"><label for="wi-${w.k}">${w.n}</label><span class="num" id="wiv-${w.k}">0%</span></div><input type="range" id="wi-${w.k}" min="${w.min}" max="${w.max}" step="1" value="0">${w.hint?`<div class="hint">${w.hint}</div>`:''}</div>`).join('');
+  WI.forEach(w => $('#wi-'+w.k).addEventListener('input', e => { whatIf[w.k] = +e.target.value; schedule(); }));
+  $('#wiReset').addEventListener('click', () => { WI.forEach(w => whatIf[w.k] = 0); syncWhatIf(); render(); });
+  $('#wiApply').addEventListener('click', () => { const ns = applyWhatIf(state, whatIf); WI.forEach(w => whatIf[w.k] = 0); syncWhatIf(); setState(ns); toast('What-if applied to inputs'); });
+  $('#scenSave').addEventListener('click', () => {
+    const name = ($('#scenName').value || '').trim() || `Scenario ${scenarios.length + 1}`;
+    scenarios.push({name: name.slice(0,60), s: applyWhatIf(state, whatIf), t: Date.now()});
+    store.set('pps.scenarios', scenarios); $('#scenName').value = ''; render(); toast(`Saved “${name}”`);
+  });
+  $('#scenList').addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return; const i = +b.dataset.i, sc = scenarios[i]; if (!sc) return;
+    if (b.dataset.act === 'load'){ WI.forEach(w => whatIf[w.k] = 0); syncWhatIf(); setState(sc.s); toast(`Loaded “${sc.name}”`); }
+    else if (b.dataset.act === 'del'){ scenarios.splice(i,1); store.set('pps.scenarios', scenarios); render(); }
+    else if (b.dataset.act === 'share'){ if (IN_FRAME){ await copyText(encodeState(sc.s)); toast('Scenario code copied'); } else { await copyText(shareLink(sc.s)); toast('Scenario link copied'); } }
+  });
+}
+function syncWhatIf(){ WI.forEach(w => { const el = $('#wi-'+w.k); if (el) el.value = whatIf[w.k]; }); }
+function renderWhatIf(s, m){
+  WI.forEach(w => { $('#wiv-'+w.k).textContent = (whatIf[w.k] > 0 ? '+' : '') + whatIf[w.k] + '%'; });
+  const ws = applyWhatIf(s, whatIf), wm = compute(ws);
+  const rows = [
+    ['Monthly profit', m.monthly, wm.monthly, v=>f$(v,0)],
+    ['Profit per sale', m.pps, wm.pps, v=>f$(v)],
+    ['New customers', m.newCust, wm.newCust, v=>fN(v)],
+    ['CAC', m.cac, wm.cac, v=>f$(v), -1],
+    ['Margin', m.margin, wm.margin, v=>fP(v)],
+    ['LTV:CAC', m.ltvcac, wm.ltvcac, v=>fX(v)],
+    ['Health', healthScore(m), healthScore(wm), v=>fN(v)]
+  ];
+  $('#wiBody').innerHTML = rows.map(([n,a,b,fmt,dir]) => { const d = b - a; const better = (dir||1) * d > 0; return `<tr><td>${n}</td><td class="num mono">${fmt(a)}</td><td class="num mono">${fmt(b)}</td><td class="num mono ${Math.abs(d)>1e-9?(better?'pos':'neg'):''}">${isFinite(d)&&Math.abs(d)>1e-9 ? (d>0?'+':'')+fmt(d) : '—'}</td></tr>`; }).join('');
+  $('#scenList').innerHTML = scenarios.length ? scenarios.map((sc,i) => { const sm = compute(sc.s); return `<div class="scen"><span class="nm" title="${esc(sc.name)}">${esc(sc.name)}</span><span class="mono small">${f$(sm.monthly,0)}/mo</span><button class="btn ghost sm" data-act="load" data-i="${i}">Load</button><button class="btn ghost sm" data-act="share" data-i="${i}">${IN_FRAME ? 'Code' : 'Link'}</button><button class="btn ghost sm" data-act="del" data-i="${i}" aria-label="Delete scenario">✕</button></div>`; }).join('') : '<div class="empty">No saved scenarios yet.</div>';
+}
+
+/* Price sensitivity */
+function priceCurve(s){
+  const p0 = s.price > 0 ? s.price : 1, e = +s.elast || 0, N = 80;
+  const lo = p0 * 0.4, hi = p0 * 2.2; const pts = [];
+  for (let i = 0; i <= N; i++){
+    const p = lo + (hi - lo) * i / N; const cv = Math.min(100, s.conv * Math.pow(p/p0, -e));
+    const a = compute(Object.assign({}, s, {price:p, conv:cv})), b = compute(Object.assign({}, s, {price:p}));
+    pts.push({p, y:a.monthly, y2:b.monthly, conv:cv, cust:a.newCust});
+  }
+  return pts;
+}
+function renderPriceChart(s, m){
+  const pts = priceCurve(s);
+  let best = pts[0]; pts.forEach(p => { if (p.y > best.y) best = p; });
+  const xt = niceTicks(pts[0].p, pts[pts.length-1].p, 6).filter(v => v >= pts[0].p && v <= pts[pts.length-1].p);
+  const markers = [{x:s.price, y:m.monthly, label:'Now ' + f$(s.price, s.price>=100?0:2)}];
+  if (Math.abs(best.p - s.price) / (s.price||1) > 0.04) markers.push({x:best.p, y:best.y, label:'Best ' + f$(best.p, best.p>=100?0:2), row:1});
+  lineChart($('#priceChart'), {
+    xs: pts.map(p=>p.p), series:[{ys:pts.map(p=>p.y), cls:'s-main', area:true}, {ys:pts.map(p=>p.y2), cls:'s-alt'}],
+    zero:true, yFmt:fK, xTicks:xt, xFmt:v=>fK(v), markers, aria:'Monthly profit by price',
+    tip: i => { const p = pts[i]; return `Price ${f$(p.p)}<br>Profit ${f$(p.y,0)}/mo<br>Conv. ${fP(p.conv,2)} · ${fN(p.cust)} sales<br><span style="opacity:.7">Conv. held: ${f$(p.y2,0)}</span>`; }
+  });
+  return best;
+}
+function renderSolver(s, m, best){
+  const T = +s.target || 0, need = T + m.ad + m.fixed, denom = 1 - m.r - m.f;
+  const pFlat = m.newCust > 0 && denom > 0 ? (need / m.newCust + m.delivery + 0.30) / denom : Infinity;
+  // with elasticity: scan for the price closest to current that meets target
+  let pE = null; const p0 = s.price || 1;
+  for (let i = 0; i <= 1200; i++){
+    const p = p0 * (0.2 + i * 0.004);
+    const cm = compute(Object.assign({}, s, {price:p, conv:Math.min(100, s.conv * Math.pow(p/p0, -(s.elast||0)))}));
+    if (cm.monthly >= T && (pE === null || Math.abs(p - p0) < Math.abs(pE - p0))) pE = p;
+  }
+  const salesNeed = m.contribution > 0 ? need / m.contribution : Infinity;
+  const visNeed = s.conv > 0 && isFinite(salesNeed) ? salesNeed / (s.conv/100) : Infinity;
+  const box = (l, v, c) => `<div class="be-item"><div class="lbl">${l}</div><div class="val">${v}</div><div class="cmp">${c}</div></div>`;
+  $('#solverOut').innerHTML = [
+    box('Price needed · conversion held', f$(pFlat), isFinite(pFlat) ? `${signed((pFlat/s.price-1)*100, v=>fP(v,0))} vs today` : 'no customers to price'),
+    box('Price needed · with elasticity', pE === null ? 'Out of reach' : f$(pE), pE === null ? `Best possible is ${f$(best.y,0)}/mo at ${f$(best.p)}` : `${signed((pE/s.price-1)*100, v=>fP(v,0))} vs today`),
+    box('Sales needed at current price', fN(Math.ceil(salesNeed)), `you make ${fN(m.newCust)} a month`),
+    box('Visitors needed at current conversion', fN(Math.ceil(visNeed)), `you get ${fN(m.visitors)} · ad spend held`)
+  ].join('');
+}
+
+/* Benchmarks */
+function renderBench(s, m){
+  const vals = benchVals(s, m);
+  $('#benchBody').innerHTML = Object.keys(BENCH_META).map(k => {
+    const meta = BENCH_META[k], b = BENCH[s.biz][k], v = vals[k], t = tierOf(k, v, s.biz);
+    const lo = Math.min(b[0], b[2]) * 0.5, hi = Math.max(b[0], b[2]) * 1.4;
+    const pos = x => clamp((x - lo) / (hi - lo), 0, 1) * 100;
+    const posF = x => meta.dir > 0 ? pos(x) : 100 - pos(x);
+    const dim = k === 'churn' && !m.sub;
+    return `<tr style="${dim?'opacity:.5':''}"><td>${meta.label}${dim?' <span class="small muted">(subscription)</span>':''}</td><td class="num mono"><strong>${meta.fmt(v)}</strong></td><td class="num mono">${meta.fmt(b[0])}</td><td class="num mono">${meta.fmt(b[1])}</td><td class="num mono">${meta.fmt(b[2])}</td>
+      <td><div class="tierbar">${b.map(x=>`<span class="tk" style="left:${posF(x)}%"></span>`).join('')}<span class="you" style="left:${isFinite(v)?posF(v):(meta.dir>0?100:0)}%"></span></div></td><td><span class="badge ${t.k}">${t.t}</span></td></tr>`;
+  }).join('');
+}
+
+/* Cohort */
+function cohortRow(s, m, churnPct){
+  const c = clamp(churnPct/100, 0, 1), cum = []; let tot = 0;
+  for (let k = 0; k < 24; k++){ tot += m.contribution * Math.pow(1 - c, k); cum.push(tot - (isFinite(m.cac) ? m.cac : 0)); }
+  const life = c > 0 ? Math.min(1/c, 60) : 60;
+  let pay = null; for (let k = 0; k < 60; k++){ let t = 0; for (let j = 0; j <= k; j++) t += m.contribution * Math.pow(1-c, j); if (t >= m.cac){ pay = k + 1; break; } }
+  return {churn: churnPct, cum, ltv: m.contribution * life, pay, ret: Array.from({length:25}, (_,k) => Math.pow(1-c, k) * 100)};
+}
+function renderCohort(s, m){
+  const cur = s.churn, rows = [{n:'Early', c:cur*1.5}, {n:'Current', c:cur}, {n:'Improved', c:cur*0.7}].map(r => Object.assign(r, cohortRow(s, m, r.c)));
+  $('#cohortNote').innerHTML = m.sub ? '' : `<div class="empty" style="margin-bottom:12px">You're on the one-time model, so this uses the churn input as a stand-in for repeat-customer loss. <button class="btn ghost sm" id="toSub">Switch to subscription</button></div>`;
+  const ts = $('#toSub'); if (ts) ts.addEventListener('click', () => setState({model:'subscription'}));
+  const xs = Array.from({length:25}, (_,i) => i);
+  lineChart($('#cohortChart'), {
+    xs, h:230, yMin:0, yMax:100, series:[{ys:rows[0].ret, cls:'s-alt3'}, {ys:rows[1].ret, cls:'s-main', area:true}, {ys:rows[2].ret, cls:'s-alt2'}],
+    yFmt:v=>v+'%', xTicks:[0,3,6,12,18,24], xFmt:v=>'M'+v, aria:'Retention curve over 24 months',
+    tip: i => `Month ${i}<br>Early ${fP(rows[0].ret[i],0)}<br>Current ${fP(rows[1].ret[i],0)}<br>Improved ${fP(rows[2].ret[i],0)}`
+  });
+  const cell = v => `<td class="num mono ${v>=0?'pos':'neg'}">${f$(v,0)}</td>`;
+  $('#cohortBody').innerHTML = rows.map(r => `<tr><td>${r.n}</td><td class="num mono">${fP(r.c,1)}</td>${cell(r.cum[0])}${cell(r.cum[2])}${cell(r.cum[5])}${cell(r.cum[11])}<td class="num mono">${f$(r.ltv,0)}</td><td class="num mono">${r.pay ? 'M' + r.pay : '> 5 yrs'}</td></tr>`).join('') +
+    `<tr><td colspan="2" class="muted small">Whole current cohort (${fN(m.newCust)} customers)</td>${[0,2,5,11].map(i => cell(rows[1].cum[i] * m.newCust)).join('')}<td class="num mono">${f$(rows[1].ltv*m.newCust,0)}</td><td></td></tr>`;
+  $('#cohortSub').textContent = `${fN(m.newCust)} customers join each month. At ${fP(cur,1)} churn, ${fP(rows[1].ret[12],0)} are still paying after a year.`;
+}
+
+/* Cash */
+function renderCash(s, m, rw){
+  const ser = cashSeries(s, m, 12), low = Math.min.apply(null, ser.concat([s.cash]));
+  const box = (l, v, c) => `<div class="be-item"><div class="lbl">${l}</div><div class="val">${v}</div><div class="cmp">${c}</div></div>`;
+  $('#cashKpis').innerHTML = [
+    box('Cash on hand', f$(s.cash, 0), 'today'),
+    box('Monthly cash swing', signed(m.monthly, v=>f$(v,0)), m.monthly >= 0 ? 'cash builds' : 'cash burns'),
+    box('Inventory buy', f$(s.invBuy, 0), s.invBuy > 0 ? `in month ${s.invMonth}` : 'none planned'),
+    box('Runway', isFinite(rw) ? fN(rw,1) + ' mo' : 'No run-out', isFinite(rw) ? 'at current swing' : 'within 10 years'),
+    box('Run-out date', isFinite(rw) ? fmtDate(addMonths(rw)) : '—', `12-mo low ${f$(low,0)}`)
+  ].join('');
+  const W = 640, H = 220, P = {l:58, r:12, t:14, b:30};
+  const vals = [s.cash].concat(ser); let yt = niceTicks(Math.min(0, ...vals), Math.max(0, ...vals), 5);
+  const ymin = yt[0], ymax = yt[yt.length-1];
+  const Y = v => P.t + (1 - (v - ymin) / ((ymax - ymin) || 1)) * (H - P.t - P.b);
+  const bw = (W - P.l - P.r) / 13;
+  let g = yt.map(v => `<line class="gridl" x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="ax" x="${P.l-8}" y="${Y(v)+3.5}" text-anchor="end">${fK(v)}</text>`).join('');
+  const now = new Date();
+  vals.forEach((v, i) => {
+    const x = P.l + i * bw + bw * 0.18, w = bw * 0.64, y0 = Y(0), y1 = Y(v);
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    g += `<rect class="${v>=0?'bar-pos':'bar-neg'}" x="${x.toFixed(1)}" y="${Math.min(y0,y1).toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(1, Math.abs(y1-y0)).toFixed(1)}" rx="2"><title>${i===0?'Today':d.toLocaleDateString('en-US',{month:'short',year:'numeric'})}: ${f$(v,0)}</title></rect>`;
+    g += `<text class="ax" x="${(x + w/2).toFixed(1)}" y="${H - P.b + 16}" text-anchor="middle">${i===0?'Now':d.toLocaleDateString('en-US',{month:'short'})}</text>`;
+    if (i === s.invMonth && s.invBuy > 0) g += `<text class="mk-lbl" x="${(x + w/2).toFixed(1)}" y="${P.t + 4}" text-anchor="middle">▼ buy</text>`;
+  });
+  if (ymin < 0) g += `<line style="stroke:var(--fg);stroke-width:1" x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+  $('#cashChart').innerHTML = `<div class="chart-wrap"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Projected cash for 12 months">${g}</svg></div>`;
+}
+
+/* History */
+function snapshotOf(s, m, label){ return {t:Date.now(), label, s:Object.assign({}, s), k:{monthly:m.monthly, margin:m.margin, cac:isFinite(m.cac)?m.cac:null, score:healthScore(m)}}; }
+function saveSnapshot(){
+  const m = compute(state);
+  const label = (activePreset ? PRESETS[activePreset].name : BIZ_NAMES[state.biz]) + ' · ' + f$(state.price);
+  history.push(snapshotOf(state, m, label)); if (history.length > 100) history.shift();
+  store.set('pps.history', history); render(); toast('Snapshot saved');
+}
+function sparkSVG(vals){
+  const v = vals.filter(x => x != null && isFinite(x));
+  if (v.length < 2) return '<div class="small muted" style="height:44px;display:flex;align-items:center">Save 2+ snapshots for a trend</div>';
+  const W = 200, H = 44, mn = Math.min(...v), mx = Math.max(...v), rg = (mx - mn) || 1;
+  const pts = v.map((x,i) => [i/(v.length-1)*(W-6)+3, H - 4 - (x - mn)/rg*(H-8)]);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path d="${pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join('')}" vector-effect="non-scaling-stroke"/><circle cx="${pts[pts.length-1][0]}" cy="${pts[pts.length-1][1]}" r="3"/></svg>`;
+}
+function alertsFor(list){
+  const out = [];
+  for (let i = 1; i < list.length; i++){
+    const a = list[i-1].k, b = list[i].k, when = new Date(list[i].t).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    if (a.margin - b.margin >= 5) out.push({when, t:list[i].label, msg:`Margin fell ${fN(a.margin - b.margin,1)} points (${fP(a.margin)} → ${fP(b.margin)}).`});
+    if (a.cac > 0 && b.cac != null && a.cac != null && (b.cac - a.cac)/a.cac >= 0.2) out.push({when, t:list[i].label, msg:`CAC rose ${fP((b.cac-a.cac)/a.cac*100,0)} (${f$(a.cac)} → ${f$(b.cac)}).`});
+  }
+  return out.reverse();
+}
+function renderHistory(s, m){
+  const H = history;
+  const last = H[H.length-1];
+  const card = (lbl, cur, vals, fmt) => `<div class="spark-card"><div class="lbl">${lbl}</div><div class="val">${fmt(cur)}</div>${sparkSVG(vals)}</div>`;
+  $('#sparks').innerHTML = card('Monthly profit', m.monthly, H.map(h=>h.k.monthly), v=>f$(v,0)) + card('Contribution margin', m.margin, H.map(h=>h.k.margin), v=>fP(v)) + card('CAC', m.cac, H.map(h=>h.k.cac), v=>f$(v));
+  const al = alertsFor(H);
+  if (last){
+    const lc = {margin:m.margin, cac:isFinite(m.cac)?m.cac:null};
+    if (last.k.margin - lc.margin >= 5) al.unshift({when:'Live', t:'vs last snapshot', msg:`Margin is ${fN(last.k.margin - lc.margin,1)} points below your last snapshot.`});
+    if (last.k.cac > 0 && lc.cac != null && (lc.cac - last.k.cac)/last.k.cac >= 0.2) al.unshift({when:'Live', t:'vs last snapshot', msg:`CAC is ${fP((lc.cac-last.k.cac)/last.k.cac*100,0)} above your last snapshot.`});
+  }
+  $('#alerts').innerHTML = al.slice(0, 6).map(a => `<div class="alert"><div class="when">${esc(a.when)} · ${esc(a.t)}</div>${esc(a.msg)}</div>`).join('');
+  $('#histBody').innerHTML = H.length ? H.slice().reverse().map((h, ri) => { const i = H.length - 1 - ri; return `<tr><td class="small mono">${new Date(h.t).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(h.label)}</td><td class="num mono">${f$(h.k.monthly,0)}</td><td class="num mono">${fP(h.k.margin)}</td><td class="num mono">${h.k.cac==null?'∞':f$(h.k.cac)}</td><td class="num mono">${h.k.score}</td><td class="num" style="white-space:nowrap"><button class="btn ghost sm" data-hact="load" data-i="${i}">Restore</button> <button class="btn ghost sm" data-hact="del" data-i="${i}" aria-label="Delete snapshot">✕</button></td></tr>`; }).join('') : `<tr><td colspan="7"><div class="empty">No snapshots yet. Save one to start tracking trends.</div></td></tr>`;
+}
+
+/* Share */
+const ENC_KEYS = ['model','biz'].concat(NUM_KEYS);
+function encodeState(s){
+  const arr = ENC_KEYS.map(k => k === 'model' ? (s.model === 'subscription' ? 1 : 0) : k === 'biz' ? BIZ_KEYS.indexOf(s.biz) : +(+s[k]).toFixed(4));
+  const json = JSON.stringify([1].concat(arr));
+  return btoa(unescape(encodeURIComponent(json))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeState(code){
+  code = String(code||'').trim();
+  const m = code.match(/#?s=([A-Za-z0-9_-]+)/); if (m) code = m[1];
+  else { const m2 = code.match(/#?s-([A-Za-z0-9-]+)/); if (m2) code = m2[1].replace(/-([mu])/g, (a, c) => c === 'm' ? '-' : '_'); }
+  if (!/^[A-Za-z0-9_-]+$/.test(code)) return null;
+  try {
+    let b = code.replace(/-/g,'+').replace(/_/g,'/'); while (b.length % 4) b += '=';
+    const arr = JSON.parse(decodeURIComponent(escape(atob(b))));
+    if (!Array.isArray(arr) || arr[0] !== 1) return null;
+    const o = {}; ENC_KEYS.forEach((k,i) => { const v = arr[i+1]; if (v === undefined) return; if (k === 'model') o.model = v ? 'subscription' : 'onetime'; else if (k === 'biz') o.biz = BIZ_KEYS[v] || 'ecommerce'; else o[k] = v; });
+    return sanitize(o);
+  } catch(e){ return null; }
+}
+const baseURL = () => location.href.split('#')[0];
+const hashFor = code => IN_FRAME ? '#s-' + code.replace(/-/g, '-m').replace(/_/g, '-u') : '#s=' + code;
+const shareLink = s => baseURL() + hashFor(encodeState(s));
+let hashT;
+function renderShare(s){
+  const code = encodeState(s);
+  $('#codeBox').textContent = code;
+  clearTimeout(hashT);
+  if (view === 'app') hashT = setTimeout(() => { try { if (view === 'app') history_replace(hashFor(code)); } catch(e){} }, 300);
+}
+let lastHash = '';
+function history_replace(h){ lastHash = h; if (location.hash !== h) window.history.replaceState(null, '', h); }
+
+function compareOptions(){
+  const o = [{v:'cur', n:'Current inputs'}, {v:'wi', n:'What-if lab'}];
+  scenarios.forEach((sc,i) => o.push({v:'sc'+i, n:'Scenario · ' + sc.name}));
+  history.forEach((h,i) => o.push({v:'hs'+i, n:'Snapshot · ' + h.label + ' (' + new Date(h.t).toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ')'}));
+  return o;
+}
+function resolveOpt(v){
+  if (v === 'cur') return state;
+  if (v === 'wi') return applyWhatIf(state, whatIf);
+  if (v && v.startsWith('sc') && scenarios[+v.slice(2)]) return scenarios[+v.slice(2)].s;
+  if (v && v.startsWith('hs') && history[+v.slice(2)]) return sanitize(history[+v.slice(2)].s);
+  return state;
+}
+function renderCompare(){
+  const opts = compareOptions(); const A = $('#cmpA'), B = $('#cmpB');
+  const va = A.value || 'cur', vb = B.value || (scenarios.length ? 'sc' + (scenarios.length-1) : 'wi');
+  const html = opts.map(o => `<option value="${o.v}">${esc(o.n)}</option>`).join('');
+  A.innerHTML = html; B.innerHTML = html;
+  A.value = opts.some(o=>o.v===va) ? va : 'cur'; B.value = opts.some(o=>o.v===vb) ? vb : 'wi';
+  const sa = resolveOpt(A.value), sb = resolveOpt(B.value), ma = compute(sa), mb = compute(sb);
+  const rows = [
+    ['Price', sa.price, sb.price, v=>f$(v), 1], ['Conversion', sa.conv, sb.conv, v=>fP(v,2), 1], ['Ad spend', sa.ad, sb.ad, v=>f$(v,0), 0],
+    ['New customers', ma.newCust, mb.newCust, v=>fN(v), 1], ['CAC', ma.cac, mb.cac, v=>f$(v), -1], ['Profit per sale', ma.pps, mb.pps, v=>f$(v), 1],
+    ['Monthly profit', ma.monthly, mb.monthly, v=>f$(v,0), 1], ['Margin', ma.margin, mb.margin, v=>fP(v), 1], ['LTV', ma.ltv, mb.ltv, v=>f$(v,0), 1],
+    ['LTV:CAC', ma.ltvcac, mb.ltvcac, v=>fX(v), 1], ['Break-even sales', ma.beSales, mb.beSales, v=>fN(Math.ceil(v)), -1],
+    ['Runway (months)', runwayOf(sa, ma), runwayOf(sb, mb), v=>isFinite(v)?fN(v,1):'∞', 1], ['Health score', healthScore(ma), healthScore(mb), v=>fN(v), 1]
+  ];
+  $('#cmpBody').innerHTML = rows.map(([n,a,b,fmt,dir]) => { const d = b - a; const ok = isFinite(d) && Math.abs(d) > 1e-9; const better = dir * d > 0; return `<tr><td>${n}</td><td class="num mono">${fmt(a)}</td><td class="num mono">${fmt(b)}</td><td class="num mono ${ok&&dir?(better?'cmp-better':'neg'):''}">${ok ? (d>0?'+':'')+fmt(d) + (dir ? (better?' ▲':' ▼') : '') : '—'}</td></tr>`; }).join('');
+}
+
+/* Summary */
+function buildSummary(s, m, score, ins, rw){
+  const pad = (l, v) => '  ' + (l + ' ').padEnd(28, '.') + ' ' + v;
+  const [vt] = verdict(m, score);
+  const L = [];
+  L.push('PROFIT & PRICING SUMMARY');
+  L.push(fmtDate(new Date()) + ' · ' + BIZ_NAMES[s.biz] + ' · ' + (m.sub ? 'subscription' : 'one-time') + ' model');
+  L.push('');
+  L.push('Health score: ' + score + '/100 — ' + vt);
+  L.push('');
+  L.push('INPUTS');
+  L.push(pad('Price per sale', f$(s.price))); L.push(pad('Delivery cost', f$(s.delivery))); L.push(pad('Payment fee', fP(s.feePct,1) + ' + $0.30'));
+  L.push(pad('Refund rate', fP(s.refund,1))); L.push(pad('Monthly visitors', fN(s.visitors))); L.push(pad('Conversion', fP(s.conv,2)));
+  L.push(pad('Ad spend / month', f$(s.ad,0))); L.push(pad('Fixed costs / month', f$(s.fixed,0)));
+  L.push(m.sub ? pad('Monthly churn', fP(s.churn,1)) : pad('Orders per customer', fN(s.orders,1)));
+  L.push('');
+  L.push('RESULTS');
+  L.push(pad('Fee per sale', f$(m.fee))); L.push(pad('Contribution per sale', f$(m.contribution))); L.push(pad('New customers / month', fN(m.newCust)));
+  L.push(pad('CAC', f$(m.cac))); L.push(pad('Profit per sale', f$(m.pps))); L.push(pad('Monthly profit', f$(m.monthly,0)));
+  L.push(pad('Contribution margin', fP(m.margin))); L.push(pad('LTV', f$(m.ltv))); L.push(pad('LTV:CAC', fX(m.ltvcac)));
+  L.push('');
+  L.push('BREAK-EVENS');
+  L.push(pad('Price (month)', f$(m.bePrice))); L.push(pad('Sales per month', fN(Math.ceil(m.beSales)))); L.push(pad('Conversion', fP(m.beConv,2))); L.push(pad('Max CAC (first sale)', f$(m.maxCac)));
+  L.push('');
+  L.push('CASH');
+  L.push(pad('Cash on hand', f$(s.cash,0))); L.push(pad('Monthly swing', f$(m.monthly,0))); L.push(pad('Runway', isFinite(rw) ? fN(rw,1) + ' months (' + fmtDate(addMonths(rw)) + ')' : 'no run-out'));
+  L.push('');
+  L.push('TOP INSIGHTS');
+  ins.slice(0,5).forEach((x,i) => L.push('  ' + (i+1) + '. [' + SEV[x.sev] + '] ' + x.t + ' — ' + x.b));
+  L.push('');
+  L.push('LEVERS (+10% each, ranked)');
+  rankLevers(s, m).forEach((l,i) => L.push('  ' + (i+1) + '. ' + l.n + ': ' + signed(l.dM, v=>f$(v,0)) + '/mo, cohort ' + signed(l.dC, v=>f$(v,0))));
+  L.push('');
+  L.push('Share code: ' + encodeState(s));
+  return L.join('\n');
+}
+
+/* ---------- views: landing page and simulator ---------- */
+let view = 'landing', pendingScroll = null;
+function ensureApp(target){ if (view === 'app') return false; pendingScroll = target; location.hash = 'app'; return true; }
+function showView(v, initial){
+  view = v;
+  document.body.classList.toggle('v-app', v === 'app');
+  document.body.classList.toggle('v-landing', v !== 'app');
+  $('#landing').hidden = v === 'app';
+  $('#appView').hidden = v !== 'app';
+  if (v === 'app'){ store.set('pps.usedApp', true); if (!initial) renderShare(state); }
+  if (!initial){
+    const target = pendingScroll && document.getElementById(pendingScroll); pendingScroll = null;
+    if (target) setTimeout(() => target.scrollIntoView({behavior:'smooth'}), 30); else window.scrollTo(0, 0);
+  }
+}
+function onHash(){
+  const h = location.hash;
+  if (h === '#app'){ showView('app'); return; }
+  if (h === '' || h === '#home'){ showView('landing'); return; }
+  if (/^#s[=-]/.test(h)){
+    if (h !== lastHash){ const s2 = decodeState(h); if (s2){ setState(s2); toast('Scenario loaded from link'); } }
+    if (view !== 'app') showView('app');
+  }
+}
+function wireAnchors(){
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (id === 'app' || id === 'home' || id === ''){
+      if (a.dataset.then) pendingScroll = a.dataset.then;
+      const want = id === 'app' ? 'app' : 'landing';
+      if (location.hash === '#' + (id || 'home') || (id === '' && location.hash === '')){ e.preventDefault(); showView(want); }
+      else if (id === ''){ e.preventDefault(); location.hash = 'home'; }
+      return;
+    }
+    const el = document.getElementById(id); if (!el) return;
+    e.preventDefault();
+    const inLanding = !!el.closest('#landing');
+    if (inLanding && view === 'app'){ pendingScroll = id; location.hash = 'home'; return; }
+    if (!inLanding && view !== 'app'){ pendingScroll = id; location.hash = 'app'; return; }
+    el.scrollIntoView({behavior:'smooth'});
+  });
+}
+function renderLanding(){
+  const ex = sanitize(PRESETS.ecommerce.s), m = compute(ex);
+  const pts = priceCurve(ex); let best = pts[0]; pts.forEach(p => { if (p.y > best.y) best = p; });
+  const ser = cashSeries(ex, m, 12); let lowI = 0; ser.forEach((v, i) => { if (v < ser[lowI]) lowI = i; });
+  const rw = runwayOf(ex, m);
+  $('#qPps').innerHTML = `${f$(m.pps)}<small>kept from each ${f$(ex.price, 0)} sale after ${f$(m.cac)} to win the customer</small>`;
+  $('#qPrice').innerHTML = `${f$(best.p)}<small>profit-maximising price vs ${f$(ex.price, 0)} today: ${signed(best.y - m.monthly, v => f$(v, 0))} a month</small>`;
+  $('#qRunway').innerHTML = isFinite(rw)
+    ? `${fN(rw, 1)} months<small>until cash runs out at the current pace</small>`
+    : `No run-out<small>lowest point ${f$(ser[lowI], 0)} in month ${lowI + 1}, after a ${f$(ex.invBuy, 0)} inventory buy</small>`;
+}
+
+/* ---------- files, guide, retention ---------- */
+async function saveFile(fname, text, mime){
+  if (window.claude && typeof window.claude.use === 'function'){
+    let d = null; try { d = await window.claude.use('downloads'); } catch(e){}
+    if (d){ try { await d.save({filename: fname, data: text}); toast('Saved ' + fname); } catch(e){ toast(e && e.code === 'declined' ? 'Download cancelled' : 'Download isn\'t available here. Use Copy instead.'); } return; }
+  }
+  if (IN_FRAME){ toast('Download isn\'t available here. Use Copy instead.'); return; }
+  const blob = new Blob([text], {type: mime || 'text/plain'}); const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = fname;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function sessionGet(k){ try { return sessionStorage.getItem(k); } catch(e){ return null; } }
+function sessionSet(k, v){ try { sessionStorage.setItem(k, v); } catch(e){} }
+let guideDismissed = false;
+const prevVisit = store.get('pps.lastVisit', null);
+function renderGuide(){
+  const g = $('#guide'); let t = '', b = '', btns = '';
+  const last = history[history.length - 1], days = last ? Math.floor((Date.now() - last.t) / 864e5) : 0;
+  if (activePreset){
+    t = `These are example numbers for a typical ${bizWord(activePreset)} business`;
+    b = 'Replace them with yours to see your own profit, break-evens and runway. Price, delivery cost, visitors and conversion matter most.';
+    btns = '<button class="btn sm" data-g="enter">Enter my numbers</button><button class="btn ghost sm" data-g="import">Import a screenshot</button>';
+  } else if (!history.length){
+    t = 'Save a snapshot to start tracking';
+    b = 'Come back each month, update what changed and save again. You\'ll get profit, margin and CAC trends, plus a warning when margin drops or CAC jumps.';
+    btns = '<button class="btn sm" data-g="snap">Save snapshot</button>' + (IN_FRAME ? '' : '<button class="btn ghost sm" data-g="remind">Add monthly reminder</button>');
+  } else if (days >= 25){
+    t = `Your last snapshot was ${days} days ago`;
+    b = `Back then monthly profit was ${f$(last.k.monthly, 0)}. Update the numbers that changed and save a new snapshot to see the trend.`;
+    btns = '<button class="btn sm" data-g="snap">Save snapshot</button>';
+  } else if (prevVisit && Date.now() - prevVisit > 6 * 36e5 && !sessionGet('pps.wb')){
+    t = 'Welcome back. Your numbers are where you left them';
+    b = `${history.length} snapshot${history.length > 1 ? 's' : ''} saved, the last ${days === 0 ? 'today' : days + ' day' + (days > 1 ? 's' : '') + ' ago'}.`;
+    btns = '<button class="btn ghost sm" data-g="history">See history</button>';
+  }
+  g.hidden = guideDismissed || !t;
+  if (!g.hidden){ $('#guideT').textContent = t; $('#guideB').textContent = b; $('#guideBtns').innerHTML = btns + '<button class="btn ghost sm" data-g="close" aria-label="Dismiss">✕</button>'; }
+}
+function icsReminder(){
+  const d = new Date(); d.setMonth(d.getMonth() + 1, 1); while (d.getDay() !== 1) d.setDate(d.getDate() + 1);
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  const link = shareLink(state);
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Profit and Pricing Simulator//EN', 'BEGIN:VEVENT',
+    'UID:' + Date.now() + '-pps@local', 'DTSTAMP:' + stamp, 'DTSTART:' + ymd + 'T090000', 'DURATION:PT15M',
+    'RRULE:FREQ=MONTHLY;BYDAY=1MO', 'SUMMARY:Update your profit numbers',
+    'DESCRIPTION:Update the inputs that changed and save a snapshot.\\n' + link,
+    'URL:' + link, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+}
+function backupText(){ return JSON.stringify({app:'profit-pricing-simulator', version:1, exported:new Date().toISOString(), current:state, scenarios, history}, null, 1); }
+function restoreBackup(obj){
+  if (!obj || obj.app !== 'profit-pricing-simulator') throw new Error('That file isn\'t a backup from this page.');
+  const okHist = Array.isArray(obj.history) ? obj.history.filter(h => h && h.k && h.s && isFinite(h.t)) : [];
+  const okScen = Array.isArray(obj.scenarios) ? obj.scenarios.filter(sc => sc && sc.s && typeof sc.name === 'string') : [];
+  const seen = new Set(history.map(h => h.t));
+  okHist.forEach(h => { if (!seen.has(h.t)) history.push({t:+h.t, label:String(h.label || 'Snapshot').slice(0, 80), s:sanitize(h.s), k:{monthly:+h.k.monthly||0, margin:+h.k.margin||0, cac:h.k.cac == null ? null : +h.k.cac, score:+h.k.score||0}}); });
+  history.sort((a, b) => a.t - b.t);
+  const names = new Set(scenarios.map(sc => sc.name));
+  okScen.forEach(sc => { if (!names.has(sc.name)) scenarios.push({name:sc.name.slice(0, 60), s:sanitize(sc.s), t:+sc.t || Date.now()}); });
+  store.set('pps.history', history); store.set('pps.scenarios', scenarios);
+  if (obj.current) setState(sanitize(obj.current)); else render();
+  return okHist.length;
+}
+function resultText(){
+  const m = compute(state), score = healthScore(m);
+  let t = `My ${bizWord(state.biz)} business scores ${score}/100 on unit economics: ${f$(m.pps)} profit per sale, LTV:CAC ${fX(m.ltvcac)}, ${fP(m.margin, 0)} contribution margin.`;
+  if (!IN_FRAME) t += ' Run your own numbers: ' + baseURL();
+  return t;
+}
+function wireGrowth(){
+  wireAnchors();
+  $('#guideBtns').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return; const g = b.dataset.g;
+    if (g === 'enter'){ activePreset = null; syncInputs(); render(); const el = $('#in-price'); el.scrollIntoView({behavior:'smooth', block:'center'}); setTimeout(() => { el.focus(); el.select(); }, 350); }
+    else if (g === 'import') document.getElementById('import').scrollIntoView({behavior:'smooth'});
+    else if (g === 'snap') saveSnapshot();
+    else if (g === 'remind') saveFile('profit-check-in.ics', icsReminder(), 'text/calendar');
+    else if (g === 'history') document.getElementById('history').scrollIntoView({behavior:'smooth'});
+    else if (g === 'close'){ guideDismissed = true; sessionSet('pps.wb', '1'); $('#guide').hidden = true; }
+  });
+  $('#remindBtn').addEventListener('click', () => saveFile('profit-check-in.ics', icsReminder(), 'text/calendar'));
+  $('#backupBtn').addEventListener('click', () => saveFile('profit-simulator-backup-' + new Date().toISOString().slice(0, 10) + '.json', backupText(), 'application/json'));
+  $('#restoreIn').addEventListener('change', async e => {
+    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    try { const n = restoreBackup(JSON.parse(await f.text())); toast('Backup restored · ' + n + ' snapshot' + (n === 1 ? '' : 's')); }
+    catch(err){ toast(err && err.message && !/JSON/.test(err.message) ? err.message : 'That file isn\'t a valid backup.'); }
+  });
+  $('#shareResult').addEventListener('click', async () => {
+    const text = resultText();
+    if (!IN_FRAME && navigator.share){ try { await navigator.share({title:'Profit & Pricing Simulator', text}); return; } catch(e){ if (e && e.name === 'AbortError') return; } }
+    await copyText(text); toast('Result copied, ready to paste');
+  });
+}
+
+/* ---------- main render ---------- */
+let raf = 0;
+function schedule(){ if (raf) return; raf = requestAnimationFrame(() => { raf = 0; render(); }); }
+let saveT;
+function render(){
+  const s = state, m = compute(s), score = healthScore(m), rw = runwayOf(s, m);
+  // live bar
+  $('#lbMonthly').textContent = f$(m.monthly, Math.abs(m.monthly) >= 1000 ? 0 : 2);
+  $('#lbPps').textContent = f$(m.pps);
+  $('#lbLtv').textContent = fX(m.ltvcac);
+  $('#lbHealth').textContent = score + '/100';
+  const goal = +s.target || 0, gp = goal > 0 ? clamp(m.monthly / goal, 0, 1) : 0;
+  $('#lbGoal').textContent = goal > 0 ? Math.round(gp * 100) + '% of ' + fK(goal) : 'Set a target';
+  $('#lbGoalBar').style.width = (gp * 100).toFixed(1) + '%';
+  renderGuide();
+  $('#lbVerdict').textContent = verdict(m, score)[0];
+  $('#heroChip1').textContent = 'Profit/sale ' + f$(m.pps);
+  $('#heroChip2').textContent = 'Monthly ' + f$(m.monthly, 0);
+  renderOverview(s, m, score);
+  renderBreakdown(s, m);
+  renderBreakevens(s, m);
+  const ins = buildInsights(s, m, rw);
+  renderInsights(ins);
+  renderLevers(s, m);
+  renderWhatIf(s, m);
+  const best = renderPriceChart(s, m);
+  renderSolver(s, m, best);
+  renderBench(s, m);
+  renderCohort(s, m);
+  renderCash(s, m, rw);
+  renderHistory(s, m);
+  renderShare(s);
+  renderCompare();
+  $('#sumPre').textContent = buildSummary(s, m, score, ins, rw);
+  clearTimeout(saveT); saveT = setTimeout(() => store.set('pps.current', state), 250);
+}
+
+/* ---------- import center ---------- */
+const RULES = [
+  {k:'conv', re:/\b(?:e-?commerce\s+)?(?:conversion\s*rate|conv\.?\s*rate|cvr|conversion\s*%|conversion)\b/i, kind:'pct'},
+  {k:'refund', re:/\b(?:refund\s*rate|refunds?|return\s*rate|returns|chargeback\s*rate)\b/i, kind:'pctOrMoney'},
+  {k:'churn', re:/\b(?:(?:monthly|logo|customer|subscriber)\s*)?(?:churn(?:\s*rate)?|cancellation\s*rate|cancel\s*rate)\b/i, kind:'pct'},
+  {k:'_repeatRate', re:/\b(?:repeat\s*(?:customer|purchase|buyer)\s*rate|returning\s*customer\s*rate)\b/i, kind:'pct'},
+  {k:'orders', re:/\b(?:orders?\s*per\s*customer|purchases?\s*per\s*customer|purchase\s*frequency|avg\.?\s*orders|average\s*orders|repeat\s*orders|lifetime\s*orders)\b/i, kind:'num'},
+  {k:'feePct', re:/\b(?:payment\s*(?:processing\s*)?fees?|processing\s*fees?|transaction\s*fees?|stripe\s*fees?|platform\s*fees?|merchant\s*fees?|fee\s*rate|fees)\b/i, kind:'pctOrMoney'},
+  {k:'ad', re:/\b(?:ad\s*spend|ads\s*spend|advertising(?:\s*(?:spend|cost|costs))?|marketing\s*spend|paid\s*(?:media|ads|social)|ad\s*costs?|amount\s*spent|meta\s*ads|facebook\s*ads|google\s*ads|total\s*spend|spend)\b/i, kind:'money'},
+  {k:'fixed', re:/\b(?:fixed\s*costs?|fixed\s*expenses|overhead|operating\s*expenses|opex|monthly\s*expenses)\b/i, kind:'money'},
+  {k:'delivery', re:/\b(?:cogs|cost\s*of\s*goods(?:\s*sold)?|delivery\s*cost|fulfil?ment(?:\s*cost)?|shipping\s*cost|unit\s*cost|cost\s*per\s*unit|cost\s*per\s*order|cost\s*to\s*serve|hosting\s*cost)\b/i, kind:'money'},
+  {k:'price', re:/\b(?:average\s*order\s*value|avg\.?\s*order\s*value|aov|arpu|arpa|average\s*revenue\s*per\s*(?:user|account|customer)|plan\s*price|unit\s*price|ticket\s*price|selling\s*price|price)\b/i, kind:'money'},
+  {k:'visitors', re:/\b(?:unique\s*visitors|visitors|sessions|visits|traffic|users)\b/i, kind:'num'},
+  {k:'_orders', re:/\b(?:total\s*orders|orders|transactions|purchases|conversions|new\s*customers|new\s*subscribers|sales\s*count)\b/i, kind:'num'},
+  {k:'_revenue', re:/\b(?:total\s*sales|gross\s*sales|net\s*sales|revenue|gross\s*revenue|total\s*revenue|sales)\b/i, kind:'money'}
+];
+const NUM_RE_G = /(\()?([-−])?\s*([$€£])?\s*(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*(%|[kK]\b|[mM]{1,2}\b)?(\))?/g;
+function findNums(str){
+  const out = []; let m; NUM_RE_G.lastIndex = 0;
+  while ((m = NUM_RE_G.exec(str))){
+    let v = parseFloat(m[4].replace(/,/g,'') + (m[5]||''));
+    const suf = m[6] || '';
+    if (/^[kK]$/.test(suf)) v *= 1e3; else if (/^[mM]{1,2}$/.test(suf)) v *= 1e6;
+    if (m[2] || (m[1] && m[7])) v = -v;
+    const after = str.slice(m.index + m[0].length, m.index + m[0].length + 12);
+    out.push({v, pct: suf === '%', money: !!m[3], raw: m[0].trim(), idx: m.index, time: /^\s*(days?|d\b|months?|mo\b|weeks?|wks?|hrs?|hours?|yrs?|years?)/i.test(after)});
+  }
+  return out;
+}
+function pickNum(seg, kind, last){
+  let ns = findNums(seg).filter(n => !n.time);
+  if (!ns.length) return null;
+  if (last) ns = ns.slice().reverse();
+  if (kind === 'pct') return ns.find(n => n.pct) || ns.find(n => !n.money) || null;
+  if (kind === 'money') return ns.find(n => n.money) || ns.find(n => !n.pct) || null;
+  if (kind === 'num') return ns.find(n => !n.pct && !n.money) || ns.find(n => !n.pct) || null;
+  return ns[0];
+}
+function lineHits(line){
+  const hits = [];
+  RULES.forEach((r, ri) => { const re = new RegExp(r.re.source, 'gi'); let m; while ((m = re.exec(line))){ hits.push({r, ri, s:m.index, e:m.index + m[0].length}); if (!m[0].length) re.lastIndex++; } });
+  hits.sort((a,b) => a.s - b.s || (b.e - b.s) - (a.e - a.s) || a.ri - b.ri);
+  const acc = []; let lastE = -1; hits.forEach(h => { if (h.s >= lastE){ acc.push(h); lastE = h.e; } });
+  return acc;
+}
+function extractRaw(text){
+  const lines = String(text).replace(/\r/g,'').split('\n').map(l => l.replace(/[|•·▲▼↑↓]/g,' ').replace(/\s+/g,' ').trim()).filter(Boolean);
+  const found = {};
+  const put = (k, n, conf, src) => {
+    if (!n) return;
+    const prev = found[k];
+    if (!prev || (prev.conf !== 'high' && conf === 'high')) found[k] = Object.assign({}, n, {conf, src});
+  };
+  lines.forEach((line, i) => {
+    const acc = lineHits(line); if (!acc.length) return;
+    const segs = acc.map((h, j) => line.slice(h.e, j + 1 < acc.length ? acc[j+1].s : line.length));
+    const nextLine = lines[i+1] || '';
+    // Tile layout: several labels on one line, numbers on the next
+    if (acc.length >= 2 && segs.every(sg => !findNums(sg).filter(n=>!n.time).length) && nextLine && !lineHits(nextLine).length){
+      const ns = findNums(nextLine).filter(n => !n.time);
+      if (ns.length >= acc.length){ acc.forEach((h, j) => put(h.r.k, ns[j], 'medium', line + ' / ' + nextLine)); return; }
+    }
+    acc.forEach((h, j) => {
+      let n = pickNum(segs[j], h.r.kind), conf = 'high', src = line;
+      if (!n && j === acc.length - 1 && nextLine){
+        const nh = lineHits(nextLine); const ns = findNums(nextLine).filter(x => !x.time);
+        if (ns.length && (!nh.length || nh[0].s > ns[0].idx)){ n = pickNum(nextLine.slice(0, nh.length ? nh[0].s : undefined), h.r.kind); conf = 'medium'; src = line + ' / ' + nextLine; }
+      }
+      if (!n && j === 0 && h.s > 0){ n = pickNum(line.slice(0, h.s), h.r.kind, true); conf = 'medium'; }
+      put(h.r.k, n, conf, src);
+    });
+  });
+  return found;
+}
+function toPct(n){ return n.pct ? n.v : (Math.abs(n.v) <= 1 ? n.v * 100 : n.v); }
+function normalizeFound(f){
+  const out = {}, add = (k, v, conf, src, note) => { if (isFinite(v)) out[k] = {k, v:+(+v).toFixed(4), conf, src, note}; };
+  const rev = f._revenue ? f._revenue.v : null, ord = f._orders ? f._orders.v : null;
+  if (f.price) add('price', f.price.v, f.price.conf, f.price.src);
+  else if (rev && ord) add('price', rev / ord, 'medium', `Revenue ${f$(rev,0)} ÷ ${fN(ord)} orders`, 'derived');
+  const price = out.price ? out.price.v : null;
+  if (f.delivery) add('delivery', f.delivery.v, f.delivery.conf, f.delivery.src);
+  if (f.feePct){
+    const n = f.feePct;
+    if (n.pct || (!n.money && n.v <= 15)) add('feePct', toPct(n), n.conf, n.src);
+    else if (rev && n.v > (price||0)) add('feePct', n.v / rev * 100, 'medium', n.src, `${f$(n.v,0)} of fees ÷ revenue`);
+    else if (price) add('feePct', Math.max(0, (n.v - 0.30) / price * 100), 'medium', n.src, 'per-sale fee → %');
+  }
+  if (f.refund){
+    const n = f.refund;
+    if (n.money){ if (rev) add('refund', n.v / rev * 100, 'medium', n.src, `${f$(n.v,0)} refunded ÷ revenue`); }
+    else if (n.pct || n.v <= 1) add('refund', toPct(n), n.conf, n.src);
+    else if (rev && ord && n.v < ord) add('refund', n.v / ord * 100, 'medium', n.src, 'refund count ÷ orders');
+  }
+  if (f.visitors) add('visitors', f.visitors.v, f.visitors.conf, f.visitors.src);
+  if (f.conv) add('conv', toPct(f.conv), f.conv.conf, f.conv.src, !f.conv.pct && f.conv.v <= 1 ? 'read as a fraction' : '');
+  else if (ord && out.visitors) add('conv', ord / out.visitors.v * 100, 'medium', `${fN(ord)} orders ÷ ${fN(out.visitors.v)} visitors`, 'derived');
+  if (!out.visitors && ord && out.conv && out.conv.v > 0) add('visitors', ord / (out.conv.v/100), 'medium', `${fN(ord)} orders ÷ conversion`, 'derived');
+  if (f.ad) add('ad', f.ad.v, f.ad.conf, f.ad.src);
+  if (f.fixed) add('fixed', f.fixed.v, f.fixed.conf, f.fixed.src);
+  if (f.orders) add('orders', Math.max(1, f.orders.v), f.orders.conf, f.orders.src);
+  else if (f._repeatRate){ const r = clamp(toPct(f._repeatRate)/100, 0, 0.9); add('orders', 1/(1-r), 'medium', f._repeatRate.src, 'from repeat rate: 1 ÷ (1 − rate)'); }
+  if (f.churn) add('churn', toPct(f.churn), f.churn.conf, f.churn.src, !f.churn.pct && f.churn.v <= 1 ? 'read as a fraction' : '');
+  return out;
+}
+function splitDelimited(text){
+  const first = text.split('\n').find(l => l.trim()) || '';
+  const delim = first.includes('\t') ? '\t' : ((first.match(/;/g)||[]).length > (first.match(/,/g)||[]).length ? ';' : ',');
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){ if (c === '"'){ if (text[i+1] === '"'){ cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === delim){ row.push(cell.trim()); cell = ''; }
+    else if (c === '\n'){ row.push(cell.trim()); rows.push(row); row = []; cell = ''; }
+    else if (c !== '\r') cell += c;
+  }
+  if (cell || row.length){ row.push(cell.trim()); rows.push(row); }
+  return rows.filter(r => r.some(c => c !== ''));
+}
+const isNumCell = c => /^\s*\(?[-−]?\s*[$€£]?\s*(\d{1,3}(,\d{3})+|\d+)(\.\d+)?\s*(%|[kKmM])?\)?\s*$/.test(c || '');
+function ruleForLabel(l){ const h = lineHits(l); return h.length ? h[0].r : null; }
+function rowsToText(rows){
+  if (!rows.length) return '';
+  const lv = rows.filter(r => r.length >= 2 && !isNumCell(r[0]) && isNumCell(r[1])).length;
+  const headerLayout = rows.length > 1 && rows[0].length > 2 && rows[0].every(c => !isNumCell(c));
+  if (!headerLayout && lv >= Math.max(1, rows.length * 0.6)) return rows.map(r => r[0] + ': ' + r[1]).join('\n');
+  const header = rows[0], data = rows.slice(1).filter(r => r.some(isNumCell));
+  const SUM = ['visitors','_orders','_revenue','ad','fixed'];
+  return header.map((h, ci) => {
+    const vals = data.map(r => r[ci]).filter(isNumCell);
+    if (!vals.length || !h) return null;
+    if (vals.length === 1) return h + ': ' + vals[0];
+    const ns = vals.map(v => findNums(v)[0]).filter(Boolean);
+    const rule = ruleForLabel(h), doSum = rule && SUM.includes(rule.k);
+    const tot = ns.reduce((a,b) => a + b.v, 0), agg = doSum ? tot : tot / ns.length;
+    const pct = ns.some(n => n.pct), money = ns.some(n => n.money);
+    return `${h}: ${money?'$':''}${+agg.toFixed(4)}${pct?'%':''}  (${doSum?'sum':'average'} of ${ns.length} rows)`;
+  }).filter(Boolean).join('\n');
+}
+function jsonToText(obj){
+  if (Array.isArray(obj) && obj.length && obj[0] && typeof obj[0] === 'object'){
+    const keys = Array.from(new Set(obj.flatMap(o => Object.keys(o||{}))));
+    return rowsToText([keys.map(humanKey)].concat(obj.map(o => keys.map(k => String(o && o[k] != null ? o[k] : '')))));
+  }
+  const lines = [];
+  (function walk(o, path){
+    if (o === null || o === undefined) return;
+    if (Array.isArray(o)){ if (o.length && typeof o[0] === 'object') lines.push(jsonToText(o)); return; }
+    if (typeof o === 'object'){ Object.keys(o).forEach(k => walk(o[k], path.concat(k))); return; }
+    if (typeof o === 'number' || typeof o === 'string') lines.push(humanKey(path.slice(-2).join(' ')) + ': ' + o);
+  })(obj, []);
+  return lines.join('\n');
+}
+function humanKey(k){ return String(k).replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[_\-.]+/g, ' ').trim(); }
+
+let detections = [];
+function showDetections(text, source){
+  const found = normalizeFound(extractRaw(text));
+  detections = Object.values(found);
+  const box = $('#detected');
+  box.hidden = false;
+  if (!detections.length){
+    $('#detSource').textContent = `Nothing recognisable in ${source}. Try labels like “Conversion rate 2.1%” or “Ad spend $4,000”.`;
+    $('#detBody').innerHTML = `<tr><td colspan="6"><div class="empty">No values detected.</div></td></tr>`;
+    $('#detApply').disabled = true;
+  } else {
+    $('#detSource').textContent = `${detections.length} value${detections.length>1?'s':''} found in ${source}. Check each one — nothing changes until you apply.`;
+    const order = ['price','delivery','feePct','refund','visitors','conv','ad','fixed','orders','churn'];
+    detections.sort((a,b) => order.indexOf(a.k) - order.indexOf(b.k));
+    $('#detBody').innerHTML = detections.map((d, i) => `<tr>
+      <td><input type="checkbox" id="det-c${i}" ${d.conf==='low'?'':'checked'} aria-label="Use ${LABELS[d.k]}"></td>
+      <td><label for="det-c${i}">${LABELS[d.k]}</label>${d.note?`<div class="hint">${esc(d.note)}</div>`:''}</td>
+      <td><input type="number" id="det-v${i}" value="${d.v}" step="any" aria-label="${LABELS[d.k]} value"></td>
+      <td class="num mono muted">${+(+state[d.k]).toFixed(2)}</td>
+      <td><span class="conf ${d.conf}">${d.conf}</span></td>
+      <td><div class="src" title="${esc(d.src)}">${esc(d.src)}</div></td></tr>`).join('');
+    $('#detApply').disabled = false;
+  }
+  if (!ensureApp('detected')) box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function setProgress(on, pct, txt){ const p = $('#progress'); p.hidden = !on; if (on){ $('#progBar').style.width = Math.round((pct||0)*100) + '%'; $('#progTxt').textContent = txt || ''; } }
+let tessLoading = null;
+function loadTesseract(){
+  if (window.Tesseract) return Promise.resolve();
+  if (tessLoading) return tessLoading;
+  tessLoading = new Promise((res, rej) => {
+    const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+    sc.onload = () => res(); sc.onerror = () => { tessLoading = null; rej(new Error('Could not load the OCR engine. Check your connection.')); };
+    document.head.appendChild(sc);
+  });
+  return tessLoading;
+}
+async function ocrImage(file){
+  setProgress(true, 0.02, 'Loading OCR engine…');
+  try {
+    await loadTesseract();
+    const logger = m => { if (m && m.status) setProgress(true, m.status === 'recognizing text' ? m.progress : 0.1, m.status.replace(/^./, c=>c.toUpperCase()) + (m.status === 'recognizing text' ? ' ' + Math.round(m.progress*100) + '%' : '…')); };
+    let res;
+    if (window.PPS_OCR_BASE){
+      const base = new URL(window.PPS_OCR_BASE, location.href).href.replace(/\/$/, '');
+      // ocr-worker.js serves the language data from a base64 copy published next to the page
+      const worker = await window.Tesseract.createWorker('eng', 1, {workerPath: base + '/ocr-worker.js', corePath: base, langPath: base, workerBlobURL: false, cacheMethod: 'none', logger});
+      try { res = await worker.recognize(file); } finally { worker.terminate(); }
+    } else res = await window.Tesseract.recognize(file, 'eng', {logger});
+    setProgress(false);
+    const text = (res && res.data && res.data.text) || '';
+    $('#importText').value = text.trim();
+    showDetections(text, `“${file.name || 'pasted image'}” (OCR)`);
+  } catch(e){ setProgress(false); toast(e.message || 'OCR failed'); }
+}
+async function handleFile(file){
+  if (!file) return;
+  const name = file.name || 'file';
+  if ((file.type || '').startsWith('image/')) return ocrImage(file);
+  const text = await file.text();
+  let parsed = text;
+  try {
+    if (/\.json$/i.test(name) || /^\s*[\[{]/.test(text)) parsed = jsonToText(JSON.parse(text));
+    else if (/\.(csv|tsv)$/i.test(name) || (/[,\t;]/.test(text.split('\n')[0]||'') && text.split('\n').length > 1 && !/:/.test(text.split('\n')[0]))) parsed = rowsToText(splitDelimited(text));
+  } catch(e){ parsed = text; }
+  $('#importText').value = parsed;
+  showDetections(parsed, `“${name}”`);
+}
+function buildImport(){
+  const drop = $('#drop');
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => { const fs = e.dataTransfer && e.dataTransfer.files; if (fs && fs.length) Array.from(fs).slice(0,1).forEach(handleFile); else { const t = e.dataTransfer.getData('text'); if (t){ $('#importText').value = t; showDetections(t, 'dropped text'); } } });
+  window.addEventListener('dragover', e => e.preventDefault());
+  window.addEventListener('drop', e => { if (!drop.contains(e.target)) { e.preventDefault(); const fs = e.dataTransfer && e.dataTransfer.files; if (fs && fs.length){ if (!ensureApp('import')) document.getElementById('import').scrollIntoView({behavior:'smooth'}); handleFile(fs[0]); } } });
+  $('#fileIn').addEventListener('change', e => { const f = e.target.files[0]; handleFile(f); e.target.value = ''; });
+  $('#extractBtn').addEventListener('click', () => { const t = $('#importText').value; if (!t.trim()) return toast('Paste some report text first'); const looksTable = t.split('\n').length > 1 && /\t|,/.test(t.split('\n')[0]) && !/:/.test(t.split('\n')[0]); showDetections(looksTable ? rowsToText(splitDelimited(t)) : t, 'pasted text'); });
+  $('#sampleBtn').addEventListener('click', () => {
+    $('#importText').value = 'Store overview — last 30 days\nSessions 38,420   ▲ 12%\nOrders 912\nTotal sales $59,736.00\nConversion rate 2.37%\nReturning customer rate 31%\nRefund rate 4.8%\nCOGS per order $19.40\nPayment processing fees 2.9%\nMeta Ads amount spent $11,250\nFixed costs: $8,400';
+    showDetections($('#importText').value, 'the sample report');
+  });
+  $('#pasteBtn').addEventListener('click', async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.read){
+        const items = await navigator.clipboard.read();
+        for (const it of items){
+          const img = it.types.find(t => t.startsWith('image/'));
+          if (img){ const b = await it.getType(img); return ocrImage(new File([b], 'clipboard image', {type:img})); }
+          if (it.types.includes('text/plain')){ const t = await (await it.getType('text/plain')).text(); $('#importText').value = t; return showDetections(t, 'clipboard text'); }
+        }
+      } else if (navigator.clipboard && navigator.clipboard.readText){ const t = await navigator.clipboard.readText(); $('#importText').value = t; return showDetections(t, 'clipboard text'); }
+      toast('Clipboard is empty');
+    } catch(e){ toast('Clipboard blocked — press Ctrl/⌘+V instead'); }
+  });
+  document.addEventListener('paste', e => {
+    const cd = e.clipboardData; if (!cd) return;
+    const file = Array.from(cd.files || []).find(f => f.type.startsWith('image/'));
+    const tag = (e.target && e.target.tagName) || '';
+    if (file){ e.preventDefault(); if (!ensureApp('import')) document.getElementById('import').scrollIntoView({behavior:'smooth'}); ocrImage(file); return; }
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return; // normal paste into a field
+    const t = cd.getData('text'); if (t && t.trim()){ e.preventDefault(); $('#importText').value = t; showDetections(t, 'pasted text'); }
+  });
+  $('#detDiscard').addEventListener('click', () => { $('#detected').hidden = true; detections = []; });
+  $('#detApply').addEventListener('click', () => {
+    const upd = {}; let n = 0;
+    detections.forEach((d, i) => { if ($('#det-c'+i).checked){ const v = parseFloat($('#det-v'+i).value); if (isFinite(v)){ upd[d.k] = v; n++; } } });
+    if (!n) return toast('Select at least one value');
+    if (upd.churn != null && upd.orders == null && state.model !== 'subscription') upd.model = 'subscription';
+    setState(upd); $('#detected').hidden = true; toast(`Applied ${n} value${n>1?'s':''}`);
+  });
+}
+
+/* ---------- wiring ---------- */
+function wire(){
+  $('#themeBtn').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('pps.theme', next); } catch(e){}
+  });
+  $('#lbSnap').addEventListener('click', saveSnapshot);
+  wireGrowth();
+  $('#snapBtn').addEventListener('click', saveSnapshot);
+  $('#histClear').addEventListener('click', e => {
+    const b = e.currentTarget; if (!history.length) return;
+    if (b.dataset.armed){ clearTimeout(b._t); delete b.dataset.armed; b.textContent = 'Clear'; history = []; store.set('pps.history', history); render(); toast('Snapshots cleared'); }
+    else { b.dataset.armed = '1'; b.textContent = 'Confirm clear'; b._t = setTimeout(() => { delete b.dataset.armed; b.textContent = 'Clear'; }, 3500); }
+  });
+  $('#histBody').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return; const i = +b.dataset.i;
+    if (b.dataset.hact === 'load' && history[i]){ setState(history[i].s); toast('Snapshot restored'); }
+    if (b.dataset.hact === 'del'){ history.splice(i,1); store.set('pps.history', history); render(); }
+  });
+  $('#copyCode').addEventListener('click', async () => { await copyText(encodeState(state)); toast('Code copied'); });
+  $('#copyLink').addEventListener('click', async () => { await copyText(shareLink(state)); toast('Link copied'); });
+  $('#lbShare').addEventListener('click', async () => { await copyText(shareLink(state)); toast('Link copied'); });
+  $('#loadCodeBtn').addEventListener('click', () => { const s = decodeState($('#loadCode').value); if (!s) return toast('That code isn\'t valid'); setState(s); $('#loadCode').value = ''; toast('Scenario loaded'); });
+  $('#loadCode').addEventListener('keydown', e => { if (e.key === 'Enter') $('#loadCodeBtn').click(); });
+  $('#cmpA').addEventListener('change', renderCompare);
+  $('#cmpB').addEventListener('change', renderCompare);
+  $('#copySum').addEventListener('click', async () => { await copyText($('#sumPre').textContent); toast('Summary copied'); });
+  $('#dlSum').addEventListener('click', () => saveFile('profit-summary-' + new Date().toISOString().slice(0,10) + '.txt', $('#sumPre').textContent, 'text/plain'));
+  window.addEventListener('hashchange', onHash);
+}
+
+function init(){
+  mountMedia($('#heroMedia'), 'hero', 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=70&sat=-100', 'Black-and-white photograph of a desk with notebooks, charts and a laptop');
+  if (IN_FRAME){
+    $('#copyLink').hidden = true; $('#lbShare').hidden = true; $('#remindBtn').hidden = true;
+    $('#shareHint').textContent = 'Your inputs as a URL-safe code. This page\'s address updates as you work, so the viewer\'s Copy link always carries the current scenario.';
+  }
+  buildInputs(); buildPresets(); buildWhatIf(); buildImport(); wire();
+  const fromHash = /^#s[=-]/.test(location.hash) ? decodeState(location.hash) : null;
+  const usedApp = store.get('pps.usedApp', false) || history.length > 0;
+  if (fromHash){ state = fromHash; activePreset = null; setTimeout(() => toast('Scenario loaded from link'), 300); }
+  else { const saved = store.get('pps.current', null); if (saved){ state = sanitize(saved); activePreset = null; } }
+  if (!fromHash && !store.get('pps.current', null)) activePreset = 'ecommerce';
+  store.set('pps.lastVisit', Date.now());
+  const h = location.hash;
+  showView(fromHash || h === '#app' || (h !== '#home' && usedApp) ? 'app' : 'landing', true);
+  syncInputs(); render(); renderLanding();
+}
+// expose for debugging/tests
+window.__pps = {compute, extract: t => normalizeFound(extractRaw(t)), rowsToText, splitDelimited, jsonToText, encodeState, decodeState, getState: () => state};
+init();
+})();
+</script>
+</body>
+</html>
