@@ -1,0 +1,46 @@
+name: Add search engine verification
+
+# Paste the verification tag from Google Search Console or Bing Webmaster Tools.
+# Actions tab -> "Add search engine verification" -> Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Verification meta tag, e.g. <meta name="google-site-verification" content="..." />'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  add-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add the tag to index.html
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          python3 - <<'PY'
+          import os, re, sys
+          tag = os.environ['TAG'].strip()
+          m = re.fullmatch(r'<meta\s+name="(google-site-verification|msvalidate\.01)"\s+content="([A-Za-z0-9_\-]+)"\s*/?>', tag)
+          if not m:
+              sys.exit('That is not a Google or Bing verification meta tag. Copy the whole <meta ...> line.')
+          name, code = m.groups()
+          new = f'<meta name="{name}" content="{code}">'
+          s = open('index.html').read()
+          s, n = re.subn(rf'<meta name="{re.escape(name)}" content="[^"]*">', new, s)
+          if n == 0:
+              s = s.replace('<meta name="theme-color"', new + '\n<meta name="theme-color"', 1)
+          open('index.html', 'w').write(s)
+          print('Added', new)
+          PY
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && { echo "Tag already present."; exit 0; }
+          git commit -m "Add search engine verification tag"
+          git push
